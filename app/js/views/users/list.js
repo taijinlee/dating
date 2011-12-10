@@ -11,22 +11,14 @@ define([
 
     template: _.template(userTemplate),
 
-    // template: _.template(userTemplate),
-
     initialize: function() {
       _.bindAll(this, 'previous', 'next', 'render');
 
       this.collection = new userCollection;
-      this.collection.bind('add', this.addUser, this);
       this.collection.bind('fetched', this.renderPager, this);
       this.collection.bind('reset', this.listUsers, this);
 
       this.collection.fetch();
-    },
-
-    addUser: function(userModel) {
-      var view = new userView({ model: userModel});
-      this.el.append(view.render().el);
     },
 
     listUsers: function() {
