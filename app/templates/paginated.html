@@ -1,0 +1,14 @@
+  <% if(prev) { %>
+    <a href="#" class="prev">previous</a>
+  <% } else { %>
+    <span>previous</span>
+  <% } %>
+
+  <%= range[0] %>..<%= range[1] %> of <%= total %>
+
+  <% if(next) { %>
+    <a href="#" class="next">next</a>
+  <% } else { %>
+    <span>next</span>
+  <% } %>
+

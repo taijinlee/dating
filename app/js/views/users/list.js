@@ -1,36 +1,40 @@
 
 define([
+  'views/paginated',
   'collections/users',
   'views/users/user',
-  'models/user',
-  'text!/templates/users/user.html'
-], function(userCollection, userView, userModel, userTemplate) {
-  var usersListView = Backbone.View.extend({
+  'text!/templates/users/user.html',
+], function(paginatedView, userCollection, userView, userTemplate) {
+
+  var usersListView = paginatedView.extend({
     el: $('#content'),
 
     template: _.template(userTemplate),
 
+    // template: _.template(userTemplate),
+
     initialize: function() {
+      _.bindAll(this, 'previous', 'next', 'render');
+
       this.collection = new userCollection;
       this.collection.bind('add', this.addUser, this);
+      this.collection.bind('fetched', this.renderPager, this);
+      this.collection.bind('reset', this.listUsers, this);
 
-      var user = new userModel({id: 4});
-      user.fetch();
-        alert('hi');
-      console.log(user);
-      this.collection.add(user);
-      console.log(this.collection);
-      //this.collection.fetch();
-      /*
-      this.collection.add({ name: "test" });
-      this.collection.add({ name: "blah" , handle: 'something else'});
-      this.collection.add({ name: "blah" , handle: 'something else else'});
-      */
+      this.collection.fetch();
     },
 
     addUser: function(userModel) {
       var view = new userView({ model: userModel});
       this.el.append(view.render().el);
+    },
+
+    listUsers: function() {
+      $("#users").html('');
+      this.collection.each(function(user) {
+        var view = new userView({ model: user });
+        $("#users").append(view.render().el);
+      });
     }
 
   });

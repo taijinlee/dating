@@ -3,7 +3,8 @@ define([
   'models/user',
   'collections/paginated'
 ], function(userModel, paginatedCollection) {
-  var userCollection = PaginatedCollection.extend({
+
+  var userCollection = paginatedCollection.extend({
 
     model: userModel,
     baseUrl: '/actions/users'
