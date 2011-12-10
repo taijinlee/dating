@@ -1,0 +1,14 @@
+
+$width: 800px;
+
+header, section#content, footer {
+  width: $width;
+  margin: 0px auto;
+
+  font-family: 'Signika', sans-serif;
+}
+
+footer {
+  text-align: center;
+  font-size: 10px;
+}

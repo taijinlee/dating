@@ -1,0 +1,5 @@
+
+// load underscore and return it
+define(['order!libs/underscore/underscore-min'], function(_) {
+  return _;
+});

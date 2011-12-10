@@ -1,0 +1,7 @@
+
+// load backbone and return it
+define(['order!libs/backbone/backbone-min'], function() {
+  _.noConflict(); // relinquish underscore global variable
+  $.noConflict(); // relinquish jquery global variable
+  return Backbone.noConflict; // return backbone and relinquish global variable
+});

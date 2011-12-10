@@ -1,0 +1,11 @@
+define([], function() {
+  var userModel = Backbone.Model.extend({
+    defaults: {
+      email: '',
+      handle: ''
+    }
+  });
+
+  return userModel;
+
+});

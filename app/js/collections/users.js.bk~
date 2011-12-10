@@ -1,0 +1,11 @@
+
+define(['models/user'], function(userModel) {
+  var userCollection = PaginatedCollection.extend({
+
+    model: userModel,
+    url: '/actions/users'
+
+  });
+  return userCollection;
+
+});
