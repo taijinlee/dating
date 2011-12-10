@@ -8,11 +8,13 @@ switch($_SERVER['REQUEST_METHOD']) {
     \lib\user::create(json_decode($POST, $assoc = true));
 
   case 'GET':
-    // retrieve
-    if (!preg_match('|(\d+)|', $_SERVER['PATH_INFO'], $matches)) {
-      echo '';
+    if (preg_match('|^/(\d+)|', $_SERVER['PATH_INFO'], $matches)) {
+      // retrieve single user
+      echo json_encode(\lib\user::get($matches[1]));
+    } else if (preg_match('|^/page=(\d+)&perPage=(\d+)|', $_SERVER['PATH_INFO'], $matches)) {
+      // retrieve list of users
+      echo json_encode(\lib\user::list_users($matches[1], $matches[2]));
     }
-    echo json_encode(\lib\user::get($matches[0]));
     break;
 
   case 'PUT':
