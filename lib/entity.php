@@ -56,7 +56,7 @@ abstract class entity {
     $column_list = '(`' . implode('`, `', $column_list) . '`)';
     $placeholders = '(' . implode(', ', $placeholders) . ')';
 
-    $conn = database::get($class::$database);
+    $conn = self::get_database();
     database::vqueryf($conn, "INSERT INTO `{$class::$table}` $column_list VALUES $placeholders", $values);
 
     if ($model['primary_key']['auto_increment']) {
@@ -77,7 +77,7 @@ abstract class entity {
 
     $field = $model['primary_key']['field']; // primary key field name
 
-    $conn = database::get($class::$database);
+    $conn = self::get_database();
     $res = database::queryf($conn, "SELECT * FROM `{$class::$table}` WHERE `$field` = " . $model['fields'][$field], $primary_key);
     $params = mysql_fetch_assoc($res);
     if (!empty($params)) {
@@ -97,7 +97,7 @@ abstract class entity {
     $class = get_called_class();
     $model = \lib\conf\models::${$class::$database}[$class::$table];
 
-    $conn = database::get($class::$database);
+    $conn = self::get_database();
     database::queryf($conn, "DELETE FROM `{$class::$table}` WHERE `" . $model['primary_key']['field'] . '` = %s LIMIT 1', $primary_key);
     return true;
   }
@@ -130,36 +130,10 @@ abstract class entity {
   /*   return $this->__fetch($primary_key); */
   /* } */
 
-  /**
-   * Helper function to fetch from database
-   */
-  private function __fetch($search_key, $field = false, array $where = array()) {
-    $class = $this->class;
-    $search_keys = array($search_key);
 
-    if (!$field) {
-      $field = $this->model['primary_key']['field']; // actual default field
-    }
-
-    $placeholders = array();
-    foreach ($where as $key => $value) {
-      $placeholders[] = "`$key` = " . $this->model['fields'][$key];
-      $search_keys[] = $value;
-    }
-    $where = '';
-    if (!empty($placeholders)) {
-      $where = ' AND ' . implode(' AND ', $placeholders);
-    }
-
-    $attributes = $this->get_attributes();
-    $database = new database($class::$database);
-    $res = $database->query("SELECT * FROM `{$class::$table}` WHERE `$field` = " . $this->model['fields'][$this->model['primary_key']['field']] . " $where", $search_keys);
-    $params = mysql_fetch_assoc($res);
-    if (!empty($params)) {
-      $this->reset($params);
-      return true;
-    }
-    return false;
+  protected static function get_database() {
+    $class = get_called_class();
+    return database::get($class::$database);
   }
 
 }

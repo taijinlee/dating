@@ -29,7 +29,7 @@ class database {
     return self::$connections[$database];
   }
 
-  public static function queryf($conn, $sql, $args) {
+  public static function queryf($conn, $sql) {
     $args = array_slice(func_get_args(), 2);
     return self::vqueryf($conn, $sql, $args);
   }
