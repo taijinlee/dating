@@ -7,10 +7,6 @@ define([], function() {
       handle: ''
     },
 
-      parse: function(resp) {
-          console.log('hi');
-          console.log(resp);
-      }
   });
 
   return userModel;

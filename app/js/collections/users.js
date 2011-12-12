@@ -10,6 +10,7 @@ define([
     baseUrl: '/actions/users'
 
   });
+
   return userCollection;
 
 });

@@ -16,17 +16,19 @@ define([
 
       this.collection = new userCollection;
       this.collection.bind('fetched', this.renderPager, this);
-      this.collection.bind('reset', this.listUsers, this);
-
-      this.collection.fetch();
+      this.collection.bind('fetched', this.listUsers, this);
     },
 
     listUsers: function() {
-      $("#users").html('');
+      var users = $('#users');
       this.collection.each(function(user) {
         var view = new userView({ model: user });
-        $("#users").append(view.render().el);
+        $(users).append(view.render().el);
       });
+    },
+
+    render: function() {
+      this.collection.fetch();
     }
 
   });

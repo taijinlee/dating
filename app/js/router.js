@@ -1,12 +1,18 @@
 
 define([
+  'views/signup',
   'views/users/list'
-], function(usersListView) {
+], function(signupView, usersListView) {
 
   var AppRouter = Backbone.Router.extend({
     routes: {
+      '': 'landingPage',
       '/users': 'showUsers',
       '*actions': 'defaultAction'
+    },
+
+    landingPage: function() {
+      signupView.render();
     },
 
     showUsers: function() {
@@ -20,7 +26,7 @@ define([
   });
 
   var initialize = function() {
-    var app_router = new AppRouter;
+    var router = new AppRouter;
     Backbone.history.start();
   };
 
