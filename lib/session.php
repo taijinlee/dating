@@ -1,7 +1,9 @@
 <?php
 namespace lib;
 
-class session {
+abstract class session extends entity {
+
+  protected static $database = 'dating', $table = 'sessions';
 
   public static function init() {
     // Register this object as the session handler
@@ -18,7 +20,7 @@ class session {
   }
 
   public static function read($session_id) {
-    $session = entity\session::retrieve($session_id);
+    $session = self::get($session_id);
     if (!$session) {
       return '';
     }
@@ -26,18 +28,17 @@ class session {
   }
 
   public static function write($session_id, $data) {
-    if (!($session = entity\session::retrieve($session_id))) {
-      entity\session::create(array('id' => $session_id, 'data' => $data));
+    if (!($session = self::get($session_id))) {
+      self::create(array('id' => $session_id, 'data' => $data));
     } else {
-      $session['data'] = $data;
-      $session->save();
+      self::update(array('id' => $session_id, 'data' => $data));
     }
     return true;
   }
 
   public static function destroy($session_id) {
-    if ($session = entity\session::retrieve($session_id)) {
-      $session->delete();
+    if ($session = self::get($session_id)) {
+      self::delete($session_id);
       return true;
     }
     return false;
