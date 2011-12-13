@@ -1,0 +1,31 @@
+<form id="profile">
+<dl>
+  <dt>Birthday</dt>
+  <dd class="dateSelector"></dd>
+
+  <dt>Gender</dt>
+  <dd>
+    <label for="gender_male">Male</label><input type="radio" id="gender_male" name="gender" value="male" <%= gender == 'male' ? 'checked' : ''%>><br/>
+    <label for="gender_female">Female</label><input type="radio" id="gender_female" name="gender" value="female" <%= gender == 'female' ? 'checked' : ''%>>
+  </dd>
+
+  <dt>Weight</dt>
+  <dd><input type="text" name="weight" value="<%= weight %>"/> lbs</dd>
+
+  <dt>Height</dt>
+  <dd class="heightSelector"></dd>
+
+  <dt>Location</dt>
+  <dd></dd>
+
+  <dt>Marital Status</dt>
+  <dd>
+    <input type="radio" name="marital_status" value="single" id="marital_single" <%= marital_status == 'single' ? 'checked' : ''%>><label for="marital_single">Single</label>
+    <input type="radio" name="marital_status" value="married" id="marital_married" <%= marital_status == 'married' ? 'checked' : ''%>><label for="marital_married">Married</label>
+    <input type="radio" name="marital_status" value="separated" id="marital_separated" <%= marital_status == 'separated' ? 'checked' : ''%>><label for="marital_separated">Separated</label>
+    <input type="radio" name="marital_status" value="divorced" id="marital_divorced" <%= marital_status == 'divorced' ? 'checked' : ''%>><label for="marital_divorced">Divorced</label>
+  </dd>
+</dl>
+
+<button class="update_profile">Update profile</button>
+</form>

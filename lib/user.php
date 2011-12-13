@@ -25,6 +25,16 @@ abstract class user extends entity {
     return array('page' => $page_number, 'perPage' => $per_page, 'total' => $total_rows, 'models' => $users);
 
   }
+
+  public static function authenticate($username, $password) {
+    $conn = self::get_database();
+    $user = mysql_fetch_assoc(database::queryf($conn, 'SELECT * FROM `users` WHERE `username` = %s', $username));
+
+    if ($user['password'] == $password) {
+      return $user;
+    }
+    return false;
+  }
   
 
 }

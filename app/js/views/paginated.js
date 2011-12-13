@@ -1,20 +1,17 @@
 
 
 define([
+  'views/app',
   'text!/templates/paginated.html'
-], function(paginationTemplate) {
+], function(appView, paginationTemplate) {
 
-  var PaginatedView = Backbone.View.extend({
+  var PaginatedView = appView.extend({
     paginateTemplate: _.template(paginationTemplate),
 
-    events: {
+    events: _.extend({
       'click a.prev': 'previous',
-      'click a.next': 'next'
-    },
-
-    initialize: function() {
-      _.bindAll(this, 'previous', 'next', 'renderPager');
-    },
+      'click a.next': 'next',
+    }, appView.prototype.events),
 
     renderPager: function() {
       $("#pager").html(this.paginateTemplate(this.collection.pageInfo()));

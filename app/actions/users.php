@@ -2,10 +2,14 @@
 
 include_once $_SERVER['DATING_ROOT'] . '/lib/init-global.php';
 
-switch($_SERVER['REQUEST_METHOD']) {
+switch ($_SERVER['REQUEST_METHOD']) {
   case 'POST':
     // create
-    \lib\user::create(json_decode($POST, $assoc = true));
+    $handle = fopen('php://input','r');
+    $jsonInput = fgets($handle);
+    $decoded = json_decode($jsonInput, true);
+    \lib\user::create($decoded);
+    break;
 
   case 'GET':
     if (preg_match('|^/(\d+)|', $_SERVER['PATH_INFO'], $matches)) {

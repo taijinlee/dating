@@ -20,7 +20,7 @@ abstract class entity {
     $model = \lib\conf\models::${$class::$database}[$class::$table];
 
     $params['date_added'] = $params['date_updated'] = 'UNIX_TIMESTAMP()';
-    $keys = array_keys($model['fields']);
+    $keys = array_keys($params);
 
     // check primary key possibilities
     if ($model['primary_key']['auto_increment']) {
@@ -87,7 +87,26 @@ abstract class entity {
   }
 
   public static function update(array $params) {
-    
+    $class = get_called_class();
+    $model = \lib\conf\models::${$class::$database}[$class::$table];
+
+    // do not update the primary key
+    $primary_key = $params[$model['primary_key']['field']];
+    unset($params['date_added'], $params[$model['primary_key']['field']]);
+    $params['date_updated'] = 'UNIX_TIMESTAMP()';
+
+    $keys = array_keys($params);
+    $set_columns = array();
+    foreach ($keys as $key) {
+      $set_columns[] = "`$key` = " . $model['fields'][$key];
+    }
+    $set_columns = 'SET ' . implode(', ', $set_columns);
+
+    $params[] = $primary_key;
+
+    $conn = self::get_database();
+    database::vqueryf($conn, "UPDATE `{$class::$table}` $set_columns WHERE `" . $model['primary_key']['field'] . '` = ' . $model['fields'][$model['primary_key']['field']], $params);
+    return true;
   }
 
   /**
@@ -108,27 +127,6 @@ abstract class entity {
   /**
    * Helper function to update into database
    */
-  /* private function __update() { */
-  /*   $class = $this->class; */
-
-  /*   $attributes = $this->get_attributes(); */
-  /*   // do not update the primary key */
-  /*   $primary_key = $attributes[$this->model['primary_key']['field']]; */
-  /*   unset($attributes['date_added'], $attributes[$this->model['primary_key']['field']]); */
-
-  /*   $keys = array_keys($attributes); */
-  /*   $set_columns = array(); */
-  /*   foreach ($keys as $key) { */
-  /*     $set_columns[] = "`$key` = " . $this->model['fields'][$key]; */
-  /*   } */
-  /*   $set_columns = 'SET ' . implode(', ', $set_columns); */
-
-  /*   $attributes[] = $primary_key; */
-
-  /*   $database = new database($class::$database); */
-  /*   $database->query("UPDATE `{$class::$table}` $set_columns WHERE `" . $this->model['primary_key']['field'] . '` = ' . $this->model['fields'][$this->model['primary_key']['field']], $attributes); */
-  /*   return $this->__fetch($primary_key); */
-  /* } */
 
 
   protected static function get_database() {

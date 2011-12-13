@@ -1,22 +1,31 @@
 
 define([
   'views/signup',
-  'views/users/list'
-], function(signupView, usersListView) {
+  'views/users/list',
+  'views/profile'
+], function(signupView, usersListView, profileView) {
 
   var AppRouter = Backbone.Router.extend({
     routes: {
       '': 'landingPage',
       '/users': 'showUsers',
+      '/profile': 'editProfile',
       '*actions': 'defaultAction'
     },
 
     landingPage: function() {
-      signupView.render();
+      var view = new signupView();
+      view.render();
     },
 
     showUsers: function() {
-      usersListView.render();
+      var view = new usersListView;
+      view.render();
+    },
+
+    editProfile: function() {
+      var view = new profileView;
+      view.render();
     },
 
     defaultAction: function(actions) {

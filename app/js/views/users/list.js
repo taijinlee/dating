@@ -12,8 +12,6 @@ define([
     template: _.template(userTemplate),
 
     initialize: function() {
-      _.bindAll(this, 'previous', 'next', 'render');
-
       this.collection = new userCollection;
       this.collection.bind('fetched', this.renderPager, this);
       this.collection.bind('fetched', this.listUsers, this);
@@ -21,6 +19,7 @@ define([
 
     listUsers: function() {
       var users = $('#users');
+      users.empty();
       this.collection.each(function(user) {
         var view = new userView({ model: user });
         $(users).append(view.render().el);
@@ -28,10 +27,12 @@ define([
     },
 
     render: function() {
-      this.collection.fetch();
+      if (this.checkLogin()) {
+        this.collection.fetch();
+      }
     }
 
   });
 
-  return new usersListView;
+  return usersListView;
 });
