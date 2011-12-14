@@ -21,6 +21,7 @@ define([
       var option_display = type.charAt(0).toUpperCase() + type.slice(1) + ':';
 
       var select = $('<select name="' + name + '"></select>');
+      select.append($('<option>' + option_display + '</option>').attr('value', ''));
       for (var i = lower_bound; i <= upper_bound; i++) {
         var option = $('<option>' + i +'</option>').attr('value', i);
         if (selected_value == i) {
@@ -30,8 +31,6 @@ define([
       }
       return select;
     }
-
-
 
   });
 

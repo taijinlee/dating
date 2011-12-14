@@ -24,7 +24,7 @@ define([
       var option_display = type.charAt(0).toUpperCase() + type.slice(1) + ':';
 
       var select = $('<select name="' + name + '"></select>');
-      select.append($('<option value="">' + option_display + '</option>').attr('value',''));
+      select.append($('<option value="">' + option_display + '</option>').attr('value', ''));
 
       var lower_bound = 1, upper_bound = 12;
       if (type == 'day') {
