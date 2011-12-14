@@ -2,8 +2,8 @@
 define([
   'views/signup',
   'views/users/list',
-  'views/profile'
-], function(signupView, usersListView, profileView) {
+  'views/profile/edit'
+], function(signupView, usersListView, profileEditView) {
 
   var AppRouter = Backbone.Router.extend({
     routes: {
@@ -24,7 +24,7 @@ define([
     },
 
     editProfile: function() {
-      var view = new profileView;
+      var view = new profileEditView;
       view.render();
     },
 

@@ -3,9 +3,10 @@ define([
   'models/user',
   'text!/templates/users/user.html'
 ], function(userModel, userTemplate) {
+
   var userView = Backbone.View.extend({
 
-    tagName: 'section',
+    tagName: 'article',
     className: 'user',
 
     template: _.template(userTemplate),

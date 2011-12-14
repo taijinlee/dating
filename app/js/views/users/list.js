@@ -1,36 +1,54 @@
 
 define([
-  'views/paginated',
+  'views/app',
   'collections/users',
   'views/users/user',
-  'text!/templates/users/user.html',
-], function(paginatedView, userCollection, userView, userTemplate) {
+  'text!/templates/paginated.html'
+], function(appView, userCollection, userView, paginateTemplate) {
 
-  var usersListView = paginatedView.extend({
+  var usersListView = appView.extend({
+
     el: $('#content'),
 
-    template: _.template(userTemplate),
+    events: {
+      'click a.prev': 'previous',
+      'click a.next': 'next',
+    },
 
     initialize: function() {
       this.collection = new userCollection;
-      this.collection.bind('fetched', this.renderPager, this);
       this.collection.bind('fetched', this.listUsers, this);
     },
 
-    listUsers: function() {
-      var users = $('#users');
-      users.empty();
-      this.collection.each(function(user) {
-        var view = new userView({ model: user });
-        $(users).append(view.render().el);
-      });
+    render: function() {
+      appView.prototype.render();
+      this.collection.fetch();
     },
 
-    render: function() {
-      if (this.checkLogin()) {
-        this.collection.fetch();
-      }
+    listUsers: function() {
+      var users = $('<section></section>');
+      this.collection.each(function(user) {
+        var view = new userView({ model: user });
+        users.append(view.render().el);
+      });
+
+      var pagination = $('<aside></aside>');
+      pagination.html(_.template(paginateTemplate, this.collection.pageInfo()));
+      users.append(pagination);
+
+      $(this.el).html(users);
+    },
+
+    previous: function() {
+      this.collection.previousPage();
+      return false;
+    },
+
+    next: function() {
+      this.collection.nextPage();
+      return false;
     }
+
 
   });
 

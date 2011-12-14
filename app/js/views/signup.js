@@ -9,25 +9,24 @@ define([
   var signupView = appView.extend({
     el: $('#content'),
 
-    template_signup: _.template(signupTemplate),
-    template_login: _.template(loginTemplate),
+    signupTemplate: _.template(signupTemplate),
+    loginTemplate: _.template(loginTemplate),
 
     events: {
       'click button.signup': 'signup',
       'click button.login': 'login'
     },
 
-    initialize: function() {
-
-    },
-
     render: function() {
-      if (this.checkLogin()) {
+      appView.prototype.render();
+
+      if (this.is_logged_in) {
         Backbone.history.navigate('/users', true);
         return;
       }
-      $(this.el).html(this.template_signup());
-      $(this.el).append(this.template_login());
+
+      $(this.el).html(this.signupTemplate());
+      $(this.el).append(this.loginTemplate());
     },
 
     signup: function() {
@@ -38,7 +37,6 @@ define([
 
       var user = new userModel();
       user.save(values);
-
     },
 
     login: function() {
@@ -53,21 +51,11 @@ define([
         'type': 'post',
         'data': values,
         'success': function() {
-          self.loggedIn();
+          Backbone.history.navigate('/users', true);
         }
       });
     },
 
-    loggedIn: function() {
-      $(this.el).empty();
-      $(this.el).append($('<div></div>').attr('id', 'logout'));
-      $(this.el).append($('<div></div>').attr('id', 'filters'));
-      $(this.el).append($('<div></div>').attr('id', 'users'));
-      $(this.el).append($('<div></div>').attr('id', 'pager'));
-
-      Backbone.history.navigate('/users', true);
-
-    }
 
   });
 
