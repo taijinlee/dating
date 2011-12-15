@@ -2,26 +2,17 @@
 
 include_once $_SERVER['DATING_ROOT'] . '/lib/init-global.php';
 
-switch ($_SERVER['REQUEST_METHOD']) {
-  case 'GET':
-    if (isset($_SESSION['user_id'])) {
-      echo json_encode(true);
-    } else {
-      echo json_encode(false);
-    }
-    break;
+abstract class login extends \lib\actions {
 
-  case 'POST':
-    // attempt to log user in
+  public static function post() {
     if ($user = \lib\user::authenticate($_POST['username'], $_POST['password'])) {
       $_SESSION['user_id'] = $user['id'];
-      echo json_encode(true);
+      return true;
     } else {
-      echo json_encode(false);
+      return false;
     }
-    break;
-
-  default:
-    \lib\log::error('REQUEST METHOD INVALID: ' . $_SERVER['REQUEST_METHOD']);
+  }
 
 }
+
+login::run();

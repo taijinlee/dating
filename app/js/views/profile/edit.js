@@ -3,10 +3,10 @@ define([
   'views/app',
   'views/lib/dateSelector',
   'views/lib/heightSelector',
-  'views/imageUploader',
+  'views/lib/imageUploader',
   'models/userProfile',
   'text!/templates/profile.html'
-], function(appView, dateSelectorView, heightSelectorView, userProfileModel, profileTemplate) {
+], function(appView, dateSelectorView, heightSelectorView, imageUploaderView, userProfileModel, profileTemplate) {
 
   var profileView = appView.extend({
     el: $('#content'),
@@ -19,7 +19,7 @@ define([
     },
 
     render: function() {
-      appView.prototype.render();
+      appView.prototype.render.call(this);
 
       var session = {};
       $.ajax({
@@ -53,9 +53,8 @@ define([
           var userHeightSelector = new heightSelectorView(userHeight);
           $('.heightSelector').append(userHeightSelector.render().el);
 
-          var ajaxUploader = new ajaxUploaderView();
-          
-          // self.renderUploader();
+          var imageUploader = new imageUploaderView();
+          $('#imageUploader').append(imageUploader.render().el);
         }
       });
 

@@ -14,25 +14,57 @@ define([
     },
 
     landingPage: function() {
-      var view = new signupView();
+      var session = this.getSession();
+      var view = new signupView({ 'session': session });
       view.render();
     },
 
     showUsers: function() {
-      var view = new usersListView;
+      var session = this.getSession();
+      if (!this.checkLogin(session)) {
+        return;
+      }
+      var view = new usersListView({ 'session': session });
       view.render();
     },
 
     editProfile: function() {
-      var view = new profileEditView;
+      var session = this.getSession();
+      if (!this.checkLogin(session)) {
+        return;
+      }
+      var view = new profileEditView({ 'session': session });
       view.render();
     },
 
     defaultAction: function(actions) {
       console.log('No Route:', actions);
+    },
+
+
+    getSession: function() {
+      var session;
+      $.ajax({
+        'url': '/actions/session',
+        'type': 'get',
+        'async': false,
+        'success': function(response, textStatus) {
+          session = JSON.parse(response);
+        }
+      });
+      return session;
+    },
+
+    checkLogin: function(session) {
+      if (session.user_id == undefined) {
+        this.navigate('', true);
+        return false;
+      }
+      return true;
     }
 
   });
+
 
   var initialize = function() {
     var router = new AppRouter;

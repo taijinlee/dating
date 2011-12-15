@@ -34,7 +34,7 @@ define([
     },
 
     url: function() {
-      return this.baseUrl + '/' + $.param({page: this.page, perPage: this.perPage});
+      return [this.baseUrl, this.page, this.perPage].join('/');
     },
 
     pageInfo: function() {

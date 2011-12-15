@@ -2,18 +2,12 @@
 
 include_once $_SERVER['DATING_ROOT'] . '/lib/init-global.php';
 
-switch($_SERVER['REQUEST_METHOD']) {
-  case 'GET':
-    // retrieve single session
-    \lib\log::debug($_SESSION);
-    echo json_encode($_SESSION);
-    break;
+abstract class session extends \lib\actions {
 
-  case 'PUT':
-    // update
-    break;
-
-  default:
-    \lib\log::error('REQUEST METHOD INVALID: ' . $_SERVER['REQUEST_METHOD']);
+  public static function get() {
+    return $_SESSION;
+  }
 
 }
+
+session::run();

@@ -15,13 +15,14 @@ define([
       'click a.next': 'next',
     },
 
-    initialize: function() {
+    initialize: function(attr) {
+      appView.prototype.initialize(attr);
       this.collection = new userCollection;
       this.collection.bind('fetched', this.listUsers, this);
     },
 
     render: function() {
-      appView.prototype.render();
+      appView.prototype.render.call(this);
       this.collection.fetch();
     },
 

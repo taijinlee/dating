@@ -18,7 +18,7 @@ define([
     },
 
     render: function() {
-      appView.prototype.render();
+      appView.prototype.render.call(this);
 
       if (this.is_logged_in) {
         Backbone.history.navigate('/users', true);
@@ -50,8 +50,12 @@ define([
         'url': '/actions/login',
         'type': 'post',
         'data': values,
-        'success': function() {
-          Backbone.history.navigate('/users', true);
+        'success': function(response) {
+          if (response == 'true') {
+            Backbone.history.navigate('/users', true);
+          } else {
+            // do some error message
+          }
         }
       });
     },

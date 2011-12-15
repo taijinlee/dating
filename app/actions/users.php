@@ -2,36 +2,35 @@
 
 include_once $_SERVER['DATING_ROOT'] . '/lib/init-global.php';
 
-switch ($_SERVER['REQUEST_METHOD']) {
-  case 'POST':
-    // create
-    $handle = fopen('php://input','r');
-    $jsonInput = fgets($handle);
-    $decoded = json_decode($jsonInput, true);
-    \lib\user::create($decoded);
-    break;
+abstract class users extends \lib\actions {
 
-  case 'GET':
-    if (preg_match('|^/(\d+)|', $_SERVER['PATH_INFO'], $matches)) {
-      // retrieve single user
-      echo json_encode(\lib\user::get($matches[1]));
-    } else if (preg_match('|^/page=(\d+)&perPage=(\d+)|', $_SERVER['PATH_INFO'], $matches)) {
-      // retrieve list of users
-      echo json_encode(\lib\user::list_users($matches[1], $matches[2]));
+  public static function post() {
+    $data = self::get_data();
+    return \lib\user::create($data);
+  }
+
+
+  public static function get() {
+    $vars = self::get_path_variables();
+    if (count($vars) == 1) {
+      return \lib\user::get(reset($vars));
+    } else if (count($vars) == 2) {
+      return \lib\user::list_users($vars[0], $vars[1]);
     }
-    break;
+  }
 
-  case 'PUT':
-    // update
-    break;
-  case 'DELETE':
-    if (!preg_match('|(\d+)|', $_SERVER['PATH_INFO'], $matches)) {
-      echo '';
+  public static function put() {
+
+  }
+
+  public static function delete() {
+    $vars = self::get_path_variables();
+    if (count($vars) == 1) {
+      \lib\user::delete(reset($vars));
     }
-    \lib\user::delete($matches[0]);
-    break;
-
-  default:
-    \lib\log::error('REQUEST METHOD INVALID: ' . $_SERVER['REQUEST_METHOD']);
+    return true;
+  }
 
 }
+
+users::run();
