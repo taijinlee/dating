@@ -14,13 +14,14 @@ abstract class users extends \lib\actions {
     $vars = self::get_path_variables();
     if (count($vars) == 1) {
       return \lib\user::get(reset($vars));
-    } else if (count($vars) == 2) {
-      return \lib\user::list_users($vars[0], $vars[1]);
+    } else {
+      return \lib\user::list_users($vars[0], $vars[1], $vars[2]);
     }
   }
 
   public static function put() {
-
+    $data = self::get_data();
+    \lib\user::update($data);
   }
 
   public static function delete() {

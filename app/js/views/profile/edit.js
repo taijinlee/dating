@@ -4,9 +4,9 @@ define([
   'views/lib/dateSelector',
   'views/lib/heightSelector',
   'views/lib/imageUploader',
-  'models/userProfile',
+  'models/user',
   'text!/templates/profile.html'
-], function(appView, dateSelectorView, heightSelectorView, imageUploaderView, userProfileModel, profileTemplate) {
+], function(appView, dateSelectorView, heightSelectorView, imageUploaderView, userModel, profileTemplate) {
 
   var profileView = appView.extend({
     el: $('#content'),
@@ -31,26 +31,17 @@ define([
         }
       });
 
-      this.userProfile = new userProfileModel({ id: session.user_id });
+      this.user = new userModel({ id: session.user_id });
 
       var self = this;
-      this.userProfile.fetch({
+      this.user.fetch({
         success: function() {
-          $(self.el).html(self.template(self.userProfile.toJSON()));
+          $(self.el).html(self.template(self.user.toJSON()));
 
-          var userBirthday = {
-            month: self.userProfile.get('birthday_month'),
-            day: self.userProfile.get('birthday_day'),
-            year: self.userProfile.get('birthday_year')
-          };
-          var birthdayDateSelector = new dateSelectorView('birthday', userBirthday);
+          var birthdayDateSelector = new dateSelectorView({ 'name_prefix': 'birthday', 'default_date': self.user.get('birthday') });
           $('.dateSelector').append(birthdayDateSelector.render().el);
 
-          var userHeight = {
-            feet: self.userProfile.get('height_feet'),
-            inches: self.userProfile.get('height_inches')
-          }
-          var userHeightSelector = new heightSelectorView(userHeight);
+          var userHeightSelector = new heightSelectorView({ 'height': self.user.get('height') });
           $('.heightSelector').append(userHeightSelector.render().el);
 
           var imageUploader = new imageUploaderView();
@@ -66,8 +57,14 @@ define([
       _.each($('#profile').serializeArray(), function(input) {
         inputs[input.name] = input.value;
       });
-      this.userProfile.set(inputs);
-      this.userProfile.save();
+      inputs['birthday'] = [inputs['birthday_year'], inputs['birthday_month'], inputs['birthday_day']].join('-');
+      delete inputs['birthday_year'], delete inputs['birthday_month'], delete inputs['birthday_day'];
+
+      inputs['height'] = parseInt(inputs['height_feet'], 10) * 12 + parseInt(inputs['height_inches'], 10);
+      delete inputs['height_feet'], delete inputs['height_inches'];
+
+      this.user.set(inputs);
+      this.user.save();
       this.navigate('/users', true);
 
       return false;

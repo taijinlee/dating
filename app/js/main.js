@@ -1,9 +1,8 @@
 
 require([
-  // load the app
-  'app',
-], function(App) {
-  // The "app" is passed in as App
-  App.initialize();
+  'router' // get router.js
+], function(Router) {
+  var vent = _.extend({}, Backbone.Events);
+  var router = new Router({ vent: vent });
 
 });

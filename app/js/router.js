@@ -1,30 +1,36 @@
 
 define([
   'views/signup',
-  'views/users/list',
+  'views/users/browse',
   'views/profile/edit'
-], function(signupView, usersListView, profileEditView) {
+], function(signupView, usersBrowseView, profileEditView) {
 
   var AppRouter = Backbone.Router.extend({
+
+    initialize: function(options) {
+      this.vent = options.vent;
+      Backbone.history.start();
+    },
+
     routes: {
       '': 'landingPage',
-      '/users': 'showUsers',
+      '/users': 'usersBrowse',
       '/profile': 'editProfile',
       '*actions': 'defaultAction'
     },
 
     landingPage: function() {
       var session = this.getSession();
-      var view = new signupView({ 'session': session });
+      var view = new signupView({ 'vent': this.vent, 'session': session });
       view.render();
     },
 
-    showUsers: function() {
+    usersBrowse: function() {
       var session = this.getSession();
       if (!this.checkLogin(session)) {
         return;
       }
-      var view = new usersListView({ 'session': session });
+      var view = new usersBrowseView({ 'vent': this.vent, 'session': session });
       view.render();
     },
 
@@ -33,14 +39,13 @@ define([
       if (!this.checkLogin(session)) {
         return;
       }
-      var view = new profileEditView({ 'session': session });
+      var view = new profileEditView({ 'vent': this.vent, 'session': session });
       view.render();
     },
 
     defaultAction: function(actions) {
       console.log('No Route:', actions);
     },
-
 
     getSession: function() {
       var session;
@@ -65,14 +70,6 @@ define([
 
   });
 
-
-  var initialize = function() {
-    var router = new AppRouter;
-    Backbone.history.start();
-  };
-
-  return {
-    initialize: initialize
-  };
+  return AppRouter;
 
 });

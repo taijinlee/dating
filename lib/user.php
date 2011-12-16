@@ -10,9 +10,34 @@ abstract class user extends entity {
   protected static $database = 'dating';
   protected static $table = 'users';
 
-  public static function list_users($page_number, $per_page) {
+  public static function list_users($page_number, $per_page, $query_string) {
+    parse_str($query_string, $parsed_query_string);
+
+    $where = $values = array();
+    foreach ($parsed_query_string as $column => $query) {
+      if (strpos($query, '[') === 0) {
+        // range
+        $range = explode(',', str_replace(array('[', ']'), '', $query));
+        if (count($range) != 2) {
+          \lib\log::error("range formatted incorrectly: $query");
+          return false;
+        }
+        $where[] = "`$column` >= %s AND `$column` <= %s";
+        $values[] = $range[0];
+        $values[] = $range[1];
+      } else {
+        // checkbox
+        $where[] = "`$column` IN (%s)";
+        $values[] = explode(',', $query);
+      }
+    }
+
+    $limit_array = array(($page_number-1) * $per_page, $per_page);
+    $values = array_merge($values, $limit_array);
+    $where = implode(' AND ', $where);
+
     $conn = self::get_database();
-    $res = database::queryf($conn, 'SELECT SQL_CALC_FOUND_ROWS * FROM `users` LIMIT %d, %d', ($page_number-1) * $per_page, $per_page);
+    $res = database::vqueryf($conn, "SELECT SQL_CALC_FOUND_ROWS * FROM `users` WHERE $where LIMIT %d, %d", $values);
 
     $users = array();
     while ($row = mysql_fetch_assoc($res)) {

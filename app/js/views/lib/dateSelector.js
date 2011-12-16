@@ -6,21 +6,21 @@ define([
 
     tagName: 'span',
 
-    initialize: function(name_prefix, selected_values) {
-      this.name_prefix = name_prefix;
-      this.selected_values = selected_values;
+    initialize: function(options) {
+      this.name_prefix = options.name_prefix;
+      this.default_date = options.default_date.split('-');
     },
 
     render: function() {
-      $(this.el).append(this.createSelect('month', this.name_prefix, this.selected_values.month));
-      $(this.el).append(this.createSelect('day', this.name_prefix, this.selected_values.day));
-      $(this.el).append(this.createSelect('year', this.name_prefix, this.selected_values.year));
+      $(this.el).append(this.createSelect('month', this.default_date[1]));
+      $(this.el).append(this.createSelect('day', this.default_date[2]));
+      $(this.el).append(this.createSelect('year', this.default_date[0]));
 
       return this;
     },
 
-    createSelect: function(type, name_prefix, selected_value) {
-      var name = name_prefix + '_' + type;
+    createSelect: function(type, selected_value) {
+      var name = this.name_prefix + '_' + type;
       var option_display = type.charAt(0).toUpperCase() + type.slice(1) + ':';
 
       var select = $('<select name="' + name + '"></select>');
@@ -34,17 +34,24 @@ define([
         lower_bound = upper_bound - 100;
       }
 
-      for (var i = lower_bound; i <= upper_bound; i++) {
-        var option = $('<option>' + i +'</option>').attr('value', i);
-        if (selected_value == i) {
-          option.attr('selected', 'selected');
-        }
-        if (type != 'year') {
+      if (type != 'year') {
+        for (var i = lower_bound; i <= upper_bound; i++) {
+          var option = $('<option>' + i +'</option>').attr('value', ((i < 10) ? '0' : '') + i);
+          if (selected_value == i) {
+            option.attr('selected', 'selected');
+          }
           select.append(option);
-        } else {
-          select.prepend(option);
+        }
+      } else {
+        for (var i = upper_bound; i >= lower_bound; i--) {
+          var option = $('<option>' + i +'</option>').attr('value', ((i < 10) ? '0' : '') + i);
+          if (selected_value == i) {
+            option.attr('selected', 'selected');
+          }
+          select.append(option);
         }
       }
+
 
       return select;
     }

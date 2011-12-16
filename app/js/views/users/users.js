@@ -1,43 +1,46 @@
 
 define([
-  'views/app',
   'collections/users',
   'views/users/user',
   'text!/templates/paginated.html'
-], function(appView, userCollection, userView, paginateTemplate) {
+], function(userCollection, userView, paginateTemplate) {
 
-  var usersListView = appView.extend({
+  var usersView = Backbone.View.extend({
 
-    el: $('#content'),
+    tagName: 'section',
 
     events: {
       'click a.prev': 'previous',
       'click a.next': 'next',
     },
 
-    initialize: function(attr) {
-      appView.prototype.initialize(attr);
+    initialize: function(options) {
+      this.vent = options.vent;
+
       this.collection = new userCollection;
-      this.collection.bind('fetched', this.listUsers, this);
+      this.collection.bind('fetched', this.render, this);
+      this.vent.bind('refreshUserList', this.fetchUsers, this);
+
+      this.vent.trigger('filterChanged');
     },
 
-    render: function() {
-      appView.prototype.render.call(this);
+    fetchUsers: function(query_string) {
+      this.collection.query_string = query_string;
+      this.collection.resetPages();
       this.collection.fetch();
     },
 
-    listUsers: function() {
-      var users = $('<section></section>');
+    render: function() {
+      $(this.el).empty();
       this.collection.each(function(user) {
         var view = new userView({ model: user });
-        users.append(view.render().el);
-      });
+        $(this.el).append(view.render().el);
+      }, this);
 
       var pagination = $('<aside></aside>');
       pagination.html(_.template(paginateTemplate, this.collection.pageInfo()));
-      users.append(pagination);
-
-      $(this.el).html(users);
+      $(this.el).append(pagination);
+      return this;
     },
 
     previous: function() {
@@ -50,8 +53,7 @@ define([
       return false;
     }
 
-
   });
 
-  return usersListView;
+  return usersView;
 });

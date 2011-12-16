@@ -6,13 +6,13 @@ define([
 
     tagName: 'span',
 
-    initialize: function(selected_values) {
-      this.selected_values = selected_values;
+    initialize: function(options) {
+      this.height = options.height;
     },
 
     render: function() {
-      $(this.el).append(this.createSelect('feet', 'height', 4, 7, this.selected_values.feet));
-      $(this.el).append(this.createSelect('inches', 'height', 0, 11, this.selected_values.inches));
+      $(this.el).append(this.createSelect('feet', 'height', 4, 7, Math.floor(this.height / 12)));
+      $(this.el).append(this.createSelect('inches', 'height', 0, 11, (this.height > 0 ? this.height % 12 : 'none')));
       return this;
     },
 
@@ -22,6 +22,7 @@ define([
 
       var select = $('<select name="' + name + '"></select>');
       select.append($('<option>' + option_display + '</option>').attr('value', ''));
+
       for (var i = lower_bound; i <= upper_bound; i++) {
         var option = $('<option>' + i +'</option>').attr('value', i);
         if (selected_value == i) {

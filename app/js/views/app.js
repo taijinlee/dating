@@ -7,8 +7,9 @@ define([
 
     el: $('div#container'),
 
-    initialize: function(attr) {
-      this.session = attr.session;
+    initialize: function(options) {
+      this.session = options.session;
+      this.vent = options.vent;
     },
 
     /**

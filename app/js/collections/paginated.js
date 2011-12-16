@@ -25,16 +25,20 @@ define([
     },
 
     parse: function(resp) {
-      this.page = parseInt(resp.page);
-      this.perPage = parseInt(resp.perPage);
-      this.total = parseInt(resp.total);
+      this.page = parseInt(resp.page, 10);
+      this.perPage = parseInt(resp.perPage, 10);
+      this.total = parseInt(resp.total, 10);
       this.pages = Math.ceil(this.total / this.perPage);
 
       return resp.models;
     },
 
     url: function() {
-      return [this.baseUrl, this.page, this.perPage].join('/');
+      var url_builder = [this.baseUrl, this.page, this.perPage];
+      if (this.query_string != undefined) {
+        url_builder.push(this.query_string);
+      }
+      return url_builder.join('/');
     },
 
     pageInfo: function() {
@@ -68,6 +72,10 @@ define([
       }
       this.page -= 1;
       return this.fetch();
+    },
+
+    resetPages: function() {
+      this.page = 1;
     }
 
   });

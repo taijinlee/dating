@@ -63,7 +63,7 @@ class database {
       if (is_array($arg)) {
         // recursively generate the sql if it is a nested array
         $placeholders = array_fill(0, count($arg), "%{$sql[$offset + 1]}");
-        $arg = self::generate_sql(implode(', ', $placeholders), $arg);
+        $arg = self::generate_sql($conn, implode(', ', $placeholders), $arg);
         // using an unescaped string at this point
         $sql[$offset + 1] = 'S';
       } else {
