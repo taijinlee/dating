@@ -8,7 +8,7 @@ namespace lib;
 
 class token {
 
-  const HASH_CYCLES = 2694;
+  const HASH_CYCLES = 1342;
 
   /**
    * Generates a token, time to live can be 0 which means forever

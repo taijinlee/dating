@@ -2,19 +2,19 @@
 define([
   'views/app',
   'models/user',
-  'text!/templates/signup.html',
-  'text!/templates/login.html'
-], function(appView, userModel, signupTemplate, loginTemplate) {
+  'text!/templates/signup.html'
+], function(appView, userModel, signupTemplate) {
 
   var signupView = appView.extend({
     el: $('#content'),
 
-    signupTemplate: _.template(signupTemplate),
-    loginTemplate: _.template(loginTemplate),
-
     events: {
-      'click button.signup': 'signup',
-      'click button.login': 'login'
+      'click a#signup_button': 'signup'
+    },
+
+    initialize: function(options) {
+      this.vent = options.vent;
+      this.session = options.session;
     },
 
     render: function() {
@@ -25,8 +25,7 @@ define([
         return;
       }
 
-      $(this.el).html(this.signupTemplate());
-      $(this.el).append(this.loginTemplate());
+      $(this.el).html(_.template(signupTemplate));
     },
 
     signup: function() {
@@ -37,29 +36,8 @@ define([
 
       var user = new userModel();
       user.save(values);
-    },
-
-    login: function() {
-      var values = {};
-      $('#login :input').each(function() {
-        values[this.name] = $(this).val();
-      });
-
-      var self = this;
-      $.ajax({
-        'url': '/actions/login',
-        'type': 'post',
-        'data': values,
-        'success': function(response) {
-          if (response == 'true') {
-            Backbone.history.navigate('/users', true);
-          } else {
-            // do some error message
-          }
-        }
-      });
-    },
-
+      this.vent.trigger('renderNotification', 'An email has been sent to you', 'success');
+    }
 
   });
 

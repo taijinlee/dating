@@ -1,17 +1,21 @@
-<section id="signup">
-  <h2>Sign to find someone <u>fun</u></h2>
-  <input type="text" placeholder="Email" name="email" />
-  <input type="text" placeholder="Username" name="username" />
-  <input type="password" placeholder="Password" name="password" />
-  I'm a
-  <select name="gender">
-    <option value="f">woman</option>
-    <option value="m">man</option>
-  </select>
-  interested in
-  <select name="seeking">
-    <option value="m">men</option>
-    <option value="f">women</option>
-  </select>
-  <button class="signup" name="signup" value="signup">Sign up!</button>
+<section id="signup" class="row">
+  <form class="nice">
+    <fieldset class="six columns offset-by-three">
+      <h4>I'm a
+        <select name="gender" class="inline">
+          <option value="f">woman</option>
+          <option value="m">man</option>
+        </select>
+        interested in
+        <select name="seeking" class="inline">
+          <option value="m">men</option>
+          <option value="f">women</option>
+        </select>
+      </h4>
+      <label for="signup_email">Email:</label><input id="signup_email" type="text" name="email" class="input-text" />
+      <label for="signup_username">Username:</label><input id="signup_username" type="text" name="username" class="input-text" />
+      <label for="signup_password">Password:</label><input id="signup_password" type="password" name="password" class="input-text" />
+      <a href="#" class="signup large blue radius nice button" id="signup_button">Sign Up</a>
+    </fieldset>
+  </form>
 </section>

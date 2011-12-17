@@ -2,8 +2,9 @@
 define([
   'views/signup',
   'views/users/browse',
-  'views/profile/edit'
-], function(signupView, usersBrowseView, profileEditView) {
+  'views/profile/edit',
+  'views/confirmUser'
+], function(signupView, usersBrowseView, profileEditView, confirmUserView) {
 
   var AppRouter = Backbone.Router.extend({
 
@@ -16,13 +17,18 @@ define([
       '': 'landingPage',
       '/users': 'usersBrowse',
       '/profile': 'editProfile',
+      '/confirmuser/:token/:time/:email': 'confirmUser',
       '*actions': 'defaultAction'
     },
 
     landingPage: function() {
       var session = this.getSession();
-      var view = new signupView({ 'vent': this.vent, 'session': session });
-      view.render();
+      if (session.user_id != undefined) {
+        this.navigate('/users', true);
+      } else {
+        var view = new signupView({ 'vent': this.vent, 'session': session });
+        view.render();
+      }
     },
 
     usersBrowse: function() {
@@ -40,6 +46,12 @@ define([
         return;
       }
       var view = new profileEditView({ 'vent': this.vent, 'session': session });
+      view.render();
+    },
+
+    confirmUser: function(token, time, email) {
+      var session = this.getSession();
+      var view = new confirmUserView({ 'vent': this.vent, 'session': session, 'token': token, 'time': time, 'email': email });
       view.render();
     },
 

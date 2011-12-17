@@ -10,6 +10,22 @@ abstract class user extends entity {
   protected static $database = 'dating';
   protected static $table = 'users';
 
+  public static function create(array $params = array()) {
+    $user_id = parent::create($params);
+    // send out email to user
+    $time = time();
+    $token = \lib\token::generate('createuser', $params['email'], $time, 0);
+    $domain = \lib\conf\constants::$domain;
+    $url = "http://$domain/#/confirmuser/$token/$time/{$params['email']}";
+    \lib\mail::send('bounce@nopuku.com', 'nobody', array($params['email']), 'Please confirm your email', $url);
+  }
+
+  public static function confirm($email) {
+    $conn = self::get_database();
+    database::queryf($conn, 'UPDATE `users` SET `confirmed` = 1, `date_updated` = UNIX_TIMESTAMP() WHERE email = %s LIMIT 1', $email);
+    return true;
+  }
+
   public static function list_users($page_number, $per_page, $query_string) {
     parse_str($query_string, $parsed_query_string);
 
@@ -55,7 +71,7 @@ abstract class user extends entity {
     $conn = self::get_database();
     $user = mysql_fetch_assoc(database::queryf($conn, 'SELECT * FROM `users` WHERE `username` = %s', $username));
 
-    if ($user['password'] == $password) {
+    if ($user['password'] == $password && $user['confirmed']) {
       return $user;
     }
     return false;

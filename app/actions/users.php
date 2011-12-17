@@ -6,7 +6,7 @@ abstract class users extends \lib\actions {
 
   public static function post() {
     $data = self::get_data();
-    return \lib\user::create($data);
+    return \lib\user::create($data) ? true : false;
   }
 
 

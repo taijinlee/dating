@@ -65,19 +65,24 @@ abstract class entity {
       $primary_key = $params[$model['primary_key']['field']];
     }
 
-    return true;
+    return $primary_key;
   }
 
   /**
    * Get entity record from database via primary_key
    */
-  public static function get($primary_key) {
+  public static function get($primary_key, $key_field = false) {
     $class = get_called_class();
     $model = \lib\conf\models::${$class::$database}[$class::$table];
 
-    $field = $model['primary_key']['field']; // primary key field name
+    if (!$key_field) {
+      $field = $model['primary_key']['field']; // primary key field name
+    } else {
+      $field = $key_field;
+    }
 
     $conn = self::get_database();
+    \lib\database::enable_log();
     $res = database::queryf($conn, "SELECT * FROM `{$class::$table}` WHERE `$field` = " . $model['fields'][$field], $primary_key);
     $params = mysql_fetch_assoc($res);
     if (!empty($params)) {
