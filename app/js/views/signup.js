@@ -1,11 +1,10 @@
 
 define([
-  'views/app',
   'models/user',
   'text!/templates/signup.html'
-], function(appView, userModel, signupTemplate) {
+], function(userModel, signupTemplate) {
 
-  var signupView = appView.extend({
+  var signupView = Backbone.View.extend({
     el: $('#content'),
 
     events: {
@@ -13,13 +12,11 @@ define([
     },
 
     initialize: function(options) {
-      this.vent = options.vent;
       this.session = options.session;
+      this.vent = options.vent;
     },
 
     render: function() {
-      appView.prototype.render.call(this);
-
       if (this.is_logged_in) {
         Backbone.history.navigate('/users', true);
         return;

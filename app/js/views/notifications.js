@@ -12,7 +12,7 @@ define([
     initialize: function(options) {
       this.vent = options.vent;
       this.vent.bind('renderNotification', this.renderNotification, this);
-      this.vent.bind('navigated', this.closeNotification, this);
+      // this.vent.bind('navigated', this.closeNotification, this);
     },
 
     renderNotification: function(message, alert_type) {
@@ -24,6 +24,7 @@ define([
 
     closeNotification: function() {
       $('section#notifications').empty();
+      return false;
     }
 
   });

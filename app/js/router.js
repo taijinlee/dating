@@ -1,10 +1,11 @@
 
 define([
+  'views/app',
   'views/signup',
   'views/users/browse',
   'views/profile/edit',
   'views/confirmUser'
-], function(signupView, usersBrowseView, profileEditView, confirmUserView) {
+], function(appView, signupView, usersBrowseView, profileEditView, confirmUserView) {
 
   var views = {
     'signupView': signupView,
@@ -17,6 +18,7 @@ define([
 
     initialize: function(options) {
       this.vent = options.vent;
+      this.appView = new appView({ vent: this.vent });
 
       var self = this;
       var viewClosures = function() {
@@ -35,6 +37,7 @@ define([
           if (typeof views_cache[viewName] === 'undefined') {
             views_cache[viewName] = new views[viewName]({ 'vent': self.vent, 'session': session });
           }
+          self.appView.render(session);
           views_cache[viewName].render();
         };
         return renderView;

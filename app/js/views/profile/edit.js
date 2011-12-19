@@ -1,14 +1,13 @@
 
 define([
-  'views/app',
   'views/lib/dateSelector',
   'views/lib/heightSelector',
   'views/lib/imageUploader',
   'models/user',
   'text!/templates/profile.html'
-], function(appView, dateSelectorView, heightSelectorView, imageUploaderView, userModel, profileTemplate) {
+], function(dateSelectorView, heightSelectorView, imageUploaderView, userModel, profileTemplate) {
 
-  var profileView = appView.extend({
+  var profileView = Backbone.View.extend({
     el: $('#content'),
 
     events: {
@@ -17,24 +16,13 @@ define([
     },
 
     initialize: function(options) {
-      appView.prototype.initialize.call(this, options);
+      this.vent = options.vent;
+      this.session = options.session;
       $(this.el).attr('class', 'row');
     },
 
     render: function() {
-      appView.prototype.render.call(this);
-
-      var session = {};
-      $.ajax({
-        'url': '/actions/session',
-        'type': 'get',
-        'async': false,
-        'success': function(data) {
-          session = JSON.parse(data);
-        }
-      });
-
-      this.user = new userModel({ id: session.user_id });
+      this.user = new userModel({ id: this.session.user_id });
 
       var self = this;
       this.user.fetch({
@@ -51,7 +39,6 @@ define([
           $('#imageUploader').append(imageUploader.render().el);
         }
       });
-
     },
 
 
@@ -73,14 +60,13 @@ define([
 
       this.user.set(inputs);
       this.user.save();
-      this.navigate('/users', true);
+      Backbone.history.navigate('/users', true);
 
       return false;
     },
 
     backToUserList: function() {
-      this.navigate('/users', true);
-
+      Backbone.history.navigate('/users', true);
       return false;
     }
 

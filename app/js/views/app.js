@@ -9,23 +9,23 @@ define([
     el: $('div#container'),
 
     initialize: function(options) {
-      this.session = options.session;
       this.vent = options.vent;
+
+      this.header = new headerView({ vent: this.vent });
+      this.notifications = new notificationsView({ vent: this.vent });
+      this.footer = new footerView({ vent: this.vent });
     },
 
     /**
      * Render functions
      */
-    render: function() {
-      var is_logged_in = (this.session.user_id != undefined);
-      var header = new headerView({ 'is_logged_in': is_logged_in });
-      header.render();
+    render: function(session) {
+      this.header.is_logged_in = (session.user_id != undefined);
+      this.header.render();
 
-      var notifications = new notificationsView({ vent: this.vent });
-      notifications.render();
+      this.notifications.render();
 
-      var footer = new footerView();
-      footer.render();
+      this.footer.render();
     },
 
     /**
