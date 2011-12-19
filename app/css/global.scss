@@ -15,8 +15,22 @@ header#header {
       display: inline;
       vertical-align: middle;
     }
+
+    ul {
+      float: right;
+      li {
+        float: left;
+        margin-left: 15px;
+        padding-left: 15px;
+        border-left: black solid 1px;
+      }
+      li:first-child {
+        border: 0px;
+      }
+    }
   }
 }
+
 
 section#signup {
   margin-top: 20px;
@@ -34,6 +48,44 @@ section#signup {
     }
   }
 }
+
+div.slider_filter {
+  width: 75%;
+  margin: 0 auto;
+}
+
+
+
+
+
+form.profile {
+  input {
+    display: inline-block;
+  }
+  dd {
+    margin-left: 10px;
+  }
+  label {
+    display: inline-block;
+  }
+}
+
+.dateSelector select {
+  display: inline;
+}
+
+.heightSelector select {
+  display: inline;
+}
+
+
+
+
+
+
+
+
+
 
 section#notifications {
   min-height: 44px;

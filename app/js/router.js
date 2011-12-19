@@ -6,47 +6,68 @@ define([
   'views/confirmUser'
 ], function(signupView, usersBrowseView, profileEditView, confirmUserView) {
 
+  var views = {
+    'signupView': signupView,
+    'usersBrowseView': usersBrowseView,
+    'profileEditView': profileEditView,
+    'confirmUserView': confirmUserView
+  };
+
   var AppRouter = Backbone.Router.extend({
 
     initialize: function(options) {
       this.vent = options.vent;
+
+      var self = this;
+      var viewClosures = function() {
+        var views_cache = {};
+
+        var renderView = function(viewName, login_required) {
+          if (login_required == undefined) {
+            true;
+          }
+
+          var session = self.getSession();
+          if (login_required && !self.checkLogin(session)) {
+            return;
+          }
+
+          if (typeof views_cache[viewName] === 'undefined') {
+            views_cache[viewName] = new views[viewName]({ 'vent': self.vent, 'session': session });
+          }
+          views_cache[viewName].render();
+        };
+        return renderView;
+      };
+
+      this.renderView = viewClosures();
+
       Backbone.history.start();
     },
 
     routes: {
-      '': 'landingPage',
+      '': 'signup',
       '/users': 'usersBrowse',
       '/profile': 'editProfile',
       '/confirmuser/:token/:time/:email': 'confirmUser',
       '*actions': 'defaultAction'
     },
 
-    landingPage: function() {
+    signup: function() {
       var session = this.getSession();
       if (session.user_id != undefined) {
         this.navigate('/users', true);
       } else {
-        var view = new signupView({ 'vent': this.vent, 'session': session });
-        view.render();
+        this.renderView('signupView', false);
       }
     },
 
     usersBrowse: function() {
-      var session = this.getSession();
-      if (!this.checkLogin(session)) {
-        return;
-      }
-      var view = new usersBrowseView({ 'vent': this.vent, 'session': session });
-      view.render();
+      this.renderView('usersBrowseView');
     },
 
     editProfile: function() {
-      var session = this.getSession();
-      if (!this.checkLogin(session)) {
-        return;
-      }
-      var view = new profileEditView({ 'vent': this.vent, 'session': session });
-      view.render();
+      this.renderView('profileEditView');
     },
 
     confirmUser: function(token, time, email) {

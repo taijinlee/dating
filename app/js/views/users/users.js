@@ -17,6 +17,8 @@ define([
     initialize: function(options) {
       this.vent = options.vent;
 
+      $(this.el).attr('class', 'nine columns');
+
       this.collection = new userCollection;
       this.collection.bind('fetched', this.render, this);
       this.vent.bind('refreshUserList', this.fetchUsers, this);

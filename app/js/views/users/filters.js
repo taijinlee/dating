@@ -11,18 +11,22 @@ define([
     initialize: function(options) {
       this.vent = options.vent;
 
+      $(this.el).attr('class', 'three columns');
       this.collection = new filtersCollection([
         { name: 'age', type: 'range', options: { upper: 100, lower: 18 }},
         { name: 'marital_status', type: 'checkbox', options: ['single', 'married', 'separated', 'divorced'] }
       ]);
+
       this.vent.bind('filterChanged', this.refreshUsers, this);
     },
 
     render: function() {
+      $(this.el).empty();
       this.collection.each(function(filter) {
         var view = new filterView({ model: filter, vent: this.vent });
         $(this.el).append(view.render().el);
       }, this);
+
       return this;
     },
 

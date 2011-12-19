@@ -11,11 +11,14 @@ define([
   var profileView = appView.extend({
     el: $('#content'),
 
-    template: _.template(profileTemplate),
-
     events: {
       'click button.update_profile': 'saveProfile',
       'click button.cancel': 'backToUserList'
+    },
+
+    initialize: function(options) {
+      appView.prototype.initialize.call(this, options);
+      $(this.el).attr('class', 'row');
     },
 
     render: function() {
@@ -36,7 +39,7 @@ define([
       var self = this;
       this.user.fetch({
         success: function() {
-          $(self.el).html(self.template(self.user.toJSON()));
+          $(self.el).html(_.template(profileTemplate, self.user.toJSON()));
 
           var birthdayDateSelector = new dateSelectorView({ 'name_prefix': 'birthday', 'default_date': self.user.get('birthday') });
           $('.dateSelector').append(birthdayDateSelector.render().el);
@@ -54,14 +57,19 @@ define([
 
     saveProfile: function() {
       var inputs = {};
-      _.each($('#profile').serializeArray(), function(input) {
+
+      _.each($('form').serializeArray(), function(input) {
         inputs[input.name] = input.value;
       });
+
       inputs['birthday'] = [inputs['birthday_year'], inputs['birthday_month'], inputs['birthday_day']].join('-');
-      delete inputs['birthday_year'], delete inputs['birthday_month'], delete inputs['birthday_day'];
+      delete inputs['birthday_year'];
+      delete inputs['birthday_month'];
+      delete inputs['birthday_day'];
 
       inputs['height'] = parseInt(inputs['height_feet'], 10) * 12 + parseInt(inputs['height_inches'], 10);
-      delete inputs['height_feet'], delete inputs['height_inches'];
+      delete inputs['height_feet'];
+      delete inputs['height_inches'];
 
       this.user.set(inputs);
       this.user.save();

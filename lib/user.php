@@ -11,7 +11,13 @@ abstract class user extends entity {
   protected static $table = 'users';
 
   public static function create(array $params = array()) {
+    $password = $params['password'];
+    $params['password'] = '';
+
     $user_id = parent::create($params);
+    $password_hash = \lib\token::generate($password, $user_id, 0, 0);
+    parent::update(array('id' => $user_id, 'password' => $password_hash));
+
     // send out email to user
     $time = time();
     $token = \lib\token::generate('createuser', $params['email'], $time, 0);
@@ -71,7 +77,7 @@ abstract class user extends entity {
     $conn = self::get_database();
     $user = mysql_fetch_assoc(database::queryf($conn, 'SELECT * FROM `users` WHERE `username` = %s', $username));
 
-    if ($user['password'] == $password && $user['confirmed']) {
+    if (\lib\token::match($user['password'], $password, $user['id'], 0, 0) && $user['confirmed']) {
       return $user;
     }
     return false;
