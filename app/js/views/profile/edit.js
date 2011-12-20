@@ -4,7 +4,7 @@ define([
   'views/lib/heightSelector',
   'views/lib/imageUploader',
   'models/user',
-  'text!/templates/profile_edit.html'
+  'text!/templates/profile/edit.html'
 ], function(dateSelectorView, heightSelectorView, imageUploaderView, userModel, profileEditTemplate) {
 
   var profileEditView = Backbone.View.extend({
