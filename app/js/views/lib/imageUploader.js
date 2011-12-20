@@ -9,24 +9,18 @@ define([
     tagName: 'section',
 
     events: {
-      'change input#uploader': 'formSubmit'
+      'change input#image': 'formSubmit',
+      'click a#image_upload_button': 'triggerUploaderClick',
     },
 
-    template: _.template(imageUploaderTemplate),
 
-    initialize: function() {
+   initialize: function(options) {
+      this.vent = options.vent;
+      this.session = options.session;
 
-      var session = {};
-      $.ajax({
-        'url': '/actions/session',
-        'type': 'get',
-        'async': false,
-        'success': function(data) {
-          session = JSON.parse(data);
-        }
-      });
+      $(this.el).attr('id', 'images').attr('class', 'eight columns');
 
-      this.collection = new imagesCollection({ 'user_id': session.user_id });
+      this.collection = new imagesCollection({ 'user_id': this.session.user_id });
       this.collection.bind('reset', this.showImages, this);
       this.collection.bind('add', this.showImage, this);
 
@@ -34,7 +28,7 @@ define([
     },
 
     render: function() {
-      $(this.el).html(this.template());
+      $(this.el).html(_.template(imageUploaderTemplate));
       return this;
     },
 
@@ -57,6 +51,11 @@ define([
     showImage: function(imageModel) {
       var img = $('<img/>').attr({ src: '/actions/image/' + imageModel.get('id') });
       $(this.el).append(img);
+    },
+
+    triggerUploaderClick: function() {
+      $('#image').click();
+      return false;
     }
 
   });
@@ -64,8 +63,3 @@ define([
   return imageUploaderView;
 
 });
-
-// exposing some global functionality for image uploader
-var signal = function() {
-  alert('hi');
-};

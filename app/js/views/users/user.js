@@ -9,10 +9,8 @@ define([
     tagName: 'article',
     className: 'user',
 
-    template: _.template(userTemplate),
-
     render: function() {
-      $(this.el).html(this.template(this.model.toJSON()));
+      $(this.el).html(_.template(userTemplate, this.model.toJSON()));
       return this;
     }
 

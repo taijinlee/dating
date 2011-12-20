@@ -57,7 +57,7 @@ div.slider_filter {
 
 
 
-
+// profile
 form.profile {
   input {
     display: inline-block;
@@ -78,7 +78,11 @@ form.profile {
   display: inline;
 }
 
-
+form#uploader {
+  input#image {
+    display: none;
+  }
+}
 
 
 

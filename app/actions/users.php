@@ -13,14 +13,19 @@ abstract class users extends \lib\actions {
   public static function get() {
     $vars = self::get_path_variables();
     if (count($vars) == 1) {
-      return \lib\user::get(reset($vars));
+      return self::sanitize(\lib\user::get(reset($vars)));
     } else {
-      return \lib\user::list_users($vars[0], $vars[1], $vars[2]);
+      $users = \lib\user::list_users($vars[0], $vars[1], $vars[2]);
+      foreach ($users['models'] as &$user) {
+        $user = self::sanitize($user);
+      }
+      unset($user);
+      return $users;
     }
   }
 
   public static function put() {
-    $data = self::get_data();
+    $data = self::transform(self::get_data());
     \lib\user::update($data);
   }
 
@@ -31,6 +36,32 @@ abstract class users extends \lib\actions {
     }
     return true;
   }
+
+  // when receiving information back
+  private static function transform($params) {
+    unset($params['age']);
+    return $params;
+  }
+
+
+  // when sending user information out
+  private static function sanitize($user) {
+
+    $user['age'] = 0;
+    if ($user['birthday'] != '0000-00-00') {
+      $today = new DateTime();
+      $birthday = new DateTime($user['birthday']);
+      $interval = $today->diff($birthday);
+      $user['age'] = $interval->y;
+    }
+
+    if ($_SESSION['user_id'] != $user['id']) {
+      unset($user['birthday'], $user['email']);
+    }
+    unset($user['password'], $user['confirmed'], $user['date_added'], $user['date_updated']);
+    return $user;
+  }
+
 
 }
 

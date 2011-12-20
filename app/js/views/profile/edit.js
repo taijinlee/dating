@@ -4,10 +4,10 @@ define([
   'views/lib/heightSelector',
   'views/lib/imageUploader',
   'models/user',
-  'text!/templates/profile.html'
-], function(dateSelectorView, heightSelectorView, imageUploaderView, userModel, profileTemplate) {
+  'text!/templates/profile_edit.html'
+], function(dateSelectorView, heightSelectorView, imageUploaderView, userModel, profileEditTemplate) {
 
-  var profileView = Backbone.View.extend({
+  var profileEditView = Backbone.View.extend({
     el: $('#content'),
 
     events: {
@@ -19,15 +19,17 @@ define([
       this.vent = options.vent;
       this.session = options.session;
       $(this.el).attr('class', 'row');
+
+      this.user = new userModel({ id: this.session.user_id });
     },
 
     render: function() {
-      this.user = new userModel({ id: this.session.user_id });
 
       var self = this;
       this.user.fetch({
         success: function() {
-          $(self.el).html(_.template(profileTemplate, self.user.toJSON()));
+
+          $(self.el).html(_.template(profileEditTemplate, self.user.toJSON()));
 
           var birthdayDateSelector = new dateSelectorView({ 'name_prefix': 'birthday', 'default_date': self.user.get('birthday') });
           $('.dateSelector').append(birthdayDateSelector.render().el);
@@ -35,12 +37,12 @@ define([
           var userHeightSelector = new heightSelectorView({ 'height': self.user.get('height') });
           $('.heightSelector').append(userHeightSelector.render().el);
 
-          var imageUploader = new imageUploaderView();
-          $('#imageUploader').append(imageUploader.render().el);
+          var imageUploader = new imageUploaderView({ vent: self.vent, session: self.session });
+          $(self.el).append(imageUploader.render().el);
+
         }
       });
     },
-
 
     saveProfile: function() {
       var inputs = {};
@@ -72,6 +74,6 @@ define([
 
   });
 
-  return profileView;
+  return profileEditView;
 
 });

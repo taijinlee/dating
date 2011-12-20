@@ -7,8 +7,7 @@ define([
     model: imageModel,
     baseUrl: '/actions/image',
 
-    initialize: function(attrs) {
-      this.user_id = attrs.user_id;
+    initialize: function(options) {
     },
 
     url: function() {

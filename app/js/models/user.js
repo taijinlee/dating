@@ -1,4 +1,6 @@
-define([], function() {
+define([
+
+], function() {
   var userModel = Backbone.Model.extend({
     urlRoot: '/actions/users',
 
@@ -7,7 +9,6 @@ define([], function() {
       weight: '',
       marital_status: ''
     },
-
 
     validate: function() {
     }

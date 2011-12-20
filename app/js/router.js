@@ -4,13 +4,15 @@ define([
   'views/signup',
   'views/users/browse',
   'views/profile/edit',
+  'views/profile/details',
   'views/confirmUser'
-], function(appView, signupView, usersBrowseView, profileEditView, confirmUserView) {
+], function(appView, signupView, usersBrowseView, profileEditView, profileDetailsView, confirmUserView) {
 
   var views = {
     'signupView': signupView,
     'usersBrowseView': usersBrowseView,
     'profileEditView': profileEditView,
+    'profileDetailsView': profileDetailsView,
     'confirmUserView': confirmUserView
   };
 
@@ -24,7 +26,7 @@ define([
       var viewClosures = function() {
         var views_cache = {};
 
-        var renderView = function(viewName, login_required) {
+        var renderView = function(viewName, login_required, render_args) {
           if (login_required == undefined) {
             true;
           }
@@ -38,7 +40,7 @@ define([
             views_cache[viewName] = new views[viewName]({ 'vent': self.vent, 'session': session });
           }
           self.appView.render(session);
-          views_cache[viewName].render();
+          views_cache[viewName].render(render_args);
         };
         return renderView;
       };
@@ -51,7 +53,8 @@ define([
     routes: {
       '': 'signup',
       '/users': 'usersBrowse',
-      '/profile': 'editProfile',
+      '/profile': 'profileEdit',
+      '/profile/:user_id': 'profileDetails',
       '/confirmuser/:token/:time/:email': 'confirmUser',
       '*actions': 'defaultAction'
     },
@@ -69,8 +72,12 @@ define([
       this.renderView('usersBrowseView');
     },
 
-    editProfile: function() {
+    profileEdit: function() {
       this.renderView('profileEditView');
+    },
+
+    profileDetails: function(user_id) {
+      this.renderView('profileDetailsView', true, { id: user_id });
     },
 
     confirmUser: function(token, time, email) {
