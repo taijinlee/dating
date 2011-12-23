@@ -1,10 +1,21 @@
+
+<header>
+  <h2>Basics</h2>
+  <% if (is_owner) { %>
+    <aside>
+      <a href="#" class="edit">Edit</a>
+    </aside>
+  <% } %>
+
+</header>
+
 <dl>
-  <dt>Weight</dt>
-  <dd><%= weight %> lbs</dd>
+  <dt class="weight">Weight</dt>
+  <dd class="weight"><%= weight %> lbs</dd>
 
-  <dt>Height</dt>
-  <dd><%= Math.floor(height / 12) %>' <%= height % 12 %>"</dd>
+  <dt class="height">Height</dt>
+  <dd class="height"><%= Math.floor(height / 12) %>' <%= height % 12 %>"</dd>
 
-  <dt>Marital Status</dt>
-  <dd><%= marital_status %></dd>
+  <dt class="marital_status">Marital Status</dt>
+  <dd class="marital_status"><%= marital_status %></dd>
 </dl>

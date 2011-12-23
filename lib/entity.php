@@ -99,17 +99,21 @@ abstract class entity {
     unset($params['date_added'], $params[$model['primary_key']['field']]);
     $params['date_updated'] = 'UNIX_TIMESTAMP()';
 
-    $keys = array_keys($params);
-    $set_columns = array();
+    $keys = array_keys($model['fields']);
+    $set_columns = $values = array();
     foreach ($keys as $key) {
+      if (!isset($params[$key])) {
+        continue;
+      }
       $set_columns[] = "`$key` = " . $model['fields'][$key];
+      $values[] = $params[$key];
     }
     $set_columns = 'SET ' . implode(', ', $set_columns);
 
-    $params[] = $primary_key;
+    $values[] = $primary_key;
 
     $conn = self::get_database();
-    database::vqueryf($conn, "UPDATE `{$class::$table}` $set_columns WHERE `" . $model['primary_key']['field'] . '` = ' . $model['fields'][$model['primary_key']['field']], $params);
+    database::vqueryf($conn, "UPDATE `{$class::$table}` $set_columns WHERE `" . $model['primary_key']['field'] . '` = ' . $model['fields'][$model['primary_key']['field']], $values);
     return true;
   }
 

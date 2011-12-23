@@ -13,17 +13,13 @@ define([
       'click a#login_button': 'login'
     },
 
-    initialize: function(attributes) {
-      this.is_logged_in = attributes.is_logged_in;
-    },
-
-    render: function() {
+    render: function(options) {
       $(this.el).html(_.template(headerTemplate)).attr('id', 'header');
 
-      if (this.is_logged_in) {
-        $(this.el).find('aside').html(_.template(loggedInTemplate));
+      if (options.user_id != undefined) {
+        $(this.el).find('aside').html(_.template(loggedInTemplate, options));
       } else {
-        $(this.el).find('aside').html(_.template(loginTemplate));
+        $(this.el).find('aside').html(_.template(loginTemplate, options));
       }
     },
 

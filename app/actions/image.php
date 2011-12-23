@@ -33,6 +33,8 @@ abstract class image extends \lib\actions {
       return '';
     }
 
+    exec("/usr/local/imagemagick/bin/convert '{$image_data['tmp_name']}' -resize 250x250^ -gravity center -extent 250x250 '{$image_data['tmp_name']}'");
+
     // error reading image
     if (!($image = file_get_contents($image_data['tmp_name']))) {
       return '';
@@ -42,6 +44,15 @@ abstract class image extends \lib\actions {
 
     return array('id' => $image_id);
   }
+
+  public static function delete() {
+    $vars = self::get_path_variables();
+    if (count($vars) == 1) {
+      \lib\image::delete(reset($vars));
+    }
+    return true;
+  }
+
 
 }
 

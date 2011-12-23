@@ -17,14 +17,6 @@ define([
    initialize: function(options) {
       this.vent = options.vent;
       this.session = options.session;
-
-      $(this.el).attr('id', 'images').attr('class', 'eight columns');
-
-      this.collection = new imagesCollection({ 'user_id': this.session.user_id });
-      this.collection.bind('reset', this.showImages, this);
-      this.collection.bind('add', this.showImage, this);
-
-      this.collection.fetch();
     },
 
     render: function() {
@@ -36,21 +28,9 @@ define([
       var self = this;
       $('form#uploader').ajaxSubmit({
         success: function(response) {
-          self.collection.add([JSON.parse(response)]);
+          self.vent.trigger('image_uploaded', [JSON.parse(response)]);
         }
       });
-    },
-
-    showImages: function() {
-      var self = this;
-      this.collection.each(function(imageModel) {
-        self.showImage(imageModel);
-      });
-    },
-
-    showImage: function(imageModel) {
-      var img = $('<img/>').attr({ src: '/actions/image/' + imageModel.get('id') });
-      $(this.el).append(img);
     },
 
     triggerUploaderClick: function() {

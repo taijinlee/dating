@@ -7,6 +7,7 @@ define([
     tagName: 'span',
 
     initialize: function(options) {
+      $(this.el).attr('class', 'heightSelector');
       this.height = options.height;
     },
 

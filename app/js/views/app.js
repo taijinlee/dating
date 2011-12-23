@@ -20,8 +20,7 @@ define([
      * Render functions
      */
     render: function(session) {
-      this.header.is_logged_in = (session.user_id != undefined);
-      this.header.render();
+      this.header.render({ user_id: session.user_id });
 
       this.notifications.render();
 

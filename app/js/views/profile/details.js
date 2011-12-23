@@ -3,8 +3,9 @@ define([
   'views/profile/userPeek',
   'views/profile/userStats',
   'views/profile/userPictures',
+  'views/lib/imageUploader',
   'models/user'
-], function(userPeekView, userStatsView, userPicturesView, userModel) {
+], function(userPeekView, userStatsView, userPicturesView, imageUploaderView, userModel) {
 
   var profileDetailsView = Backbone.View.extend({
 
@@ -16,29 +17,33 @@ define([
 
       $(this.el).attr('class', 'row');
 
-      this.userPeek = new userPeekView();
-      this.userStats = new userStatsView();
-      this.userPictures = new userPicturesView();
+      this.userPeek = new userPeekView(options);
+      this.userStats = new userStatsView(options);
+      this.userPictures = new userPicturesView(options);
+      this.imageUploader = new imageUploaderView(options);
 
       this.user = new userModel();
-      this.user.bind('change', this.renderUserDetails, this);
+      // this.user.bind('change', this.renderUserDetails, this);
     },
 
 
     render: function(options) {
       this.user.set({ id: options.id }, { silent: true });
-      $(this.el).empty();
-      this.user.fetch();
+      var self = this;
+      this.user.fetch({
+        success: function() { self.renderUserDetails(); }
+      });
     },
 
     renderUserDetails: function() {
+      $(this.el).empty();
       $(this.el).append(this.userPeek.render(this.user.toJSON()).el);
-      $(this.el).append(this.userStats.render(this.user.toJSON()).el);
-      // $(this.el).append(user.quip);
-      $(this.el).append(this.userPictures.render(this.user.toJSON()).el);
+      var row = $(this.make('div', { 'class': 'row' }));
+      row.append(this.userStats.render(this.user).el);
+      row.append(this.userPictures.render(this.user.toJSON()).el);
+      $(this.el).append(row);
 
-      // var imageUploader = new imageUploaderView({ vent: this.vent, session: this.session });
-      // $(this.el).append(imageUploader.render().el);
+      $(this.el).append(this.imageUploader.render().el);
     }
 
   });

@@ -8,10 +8,20 @@ define([
 
     tagName: 'ul',
 
+    events: {
+      'click a.delete': 'deleteImage'
+    },
+
+
     initialize: function(options) {
-      //this.vent = options.vent;
+      this.vent = options.vent;
+
+      $(this.el).attr('class', 'userPictures eight columns');
+
+      this.vent.bind('image_uploaded', this.addImage, this);
       this.collection = new imagesCollection();
       this.collection.bind('reset', this.showImages, this);
+      this.collection.bind('add', this.showImages, this);
     },
 
     render: function(user) {
@@ -20,7 +30,12 @@ define([
       return this;
     },
 
+    addImage: function(imageJSON) {
+      this.collection.add(imageJSON);
+    },
+
     showImages: function() {
+      $(this.el).empty();
       var self = this;
       this.collection.each(function(imageModel) {
         self.showImage(imageModel);
@@ -28,8 +43,21 @@ define([
     },
 
     showImage: function(imageModel) {
-      var li = this.make('li', {}, this.make('img', { src: '/actions/image/' + imageModel.get('id') }));
+      var img = this.make('img', { 'src': '/actions/image/' + imageModel.get('id') });
+      var profile_photo = this.make('a', { 'href': '#', 'class': 'makeProfilePhoto' }, 'Make profile picture');
+      var delete_photo = this.make('a', { 'href': '#', 'class': 'delete', 'id': 'image_' +imageModel.get('id') }, 'x');
+
+      var li = this.make('li', { 'class': 'picture', 'id': 'image_container_' + imageModel.get('id') });
+      $(li).append(img).append(profile_photo).append(delete_photo);
       $(this.el).append(li);
+    },
+
+    deleteImage: function(event, something) {
+      var image = this.collection.get($(event.target).attr('id').split('_')[1]);
+      this.collection.remove(image);
+      $('#image_container_' + image.get('id')).remove();
+      image.destroy();
+      return false;
     }
 
   });

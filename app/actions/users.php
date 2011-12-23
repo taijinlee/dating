@@ -40,12 +40,18 @@ abstract class users extends \lib\actions {
   // when receiving information back
   private static function transform($params) {
     unset($params['age']);
+    $params['id'] = $_SESSION['user_id'];
     return $params;
   }
 
 
   // when sending user information out
   private static function sanitize($user) {
+    $user['is_owner'] = ($_SESSION['user_id'] == $user['id']) ? 1 : 0;
+
+    if (!$user['is_owner']) {
+      unset($user['birthday'], $user['email']);
+    }
 
     $user['age'] = 0;
     if ($user['birthday'] != '0000-00-00') {
@@ -55,9 +61,6 @@ abstract class users extends \lib\actions {
       $user['age'] = $interval->y;
     }
 
-    if ($_SESSION['user_id'] != $user['id']) {
-      unset($user['birthday'], $user['email']);
-    }
     unset($user['password'], $user['confirmed'], $user['date_added'], $user['date_updated']);
     return $user;
   }

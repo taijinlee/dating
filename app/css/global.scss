@@ -1,5 +1,5 @@
 
-header, section#content, footer {
+body {
   font-family: 'Signika', sans-serif;
 }
 
@@ -58,6 +58,107 @@ div.slider_filter {
 
 
 // profile
+section.userPeek {
+  height: 250px;
+  min-width: 640px;
+
+  img {
+    float: left;
+    display: inline-block;
+    height: 250px;
+    width: 250px;
+  }
+
+  aside {
+    font-size: 12px;
+    width: 500px;
+    h2 {
+      color: #e86d45;
+    }
+    section {
+      margin: 10px 0 0 20px;
+      padding: 5px;
+      font-size: 14px;
+      max-width: 500px;
+      border: 1px solid #ddd;
+    }
+  }
+}
+
+form.profileBasics {
+  header {
+    h2, aside {
+      display: inline-block;
+    }
+  }
+  dt {
+    font-weight: bolder;
+  }
+
+  dd {
+    margin-bottom: 5px;
+  }
+
+  input.weightInput {
+    display: inline-block;
+  }
+}
+
+
+
+
+ul.userPictures {
+  li.picture {
+    position: relative;
+    width: 150px;
+    height: 150px;
+  }
+  li.picture:hover {
+    background: #000;
+    border-radius: 5px;
+  }
+
+  img {
+    max-width: 150px;
+    max-height: 150px;
+    border-radius: 5px;
+  }
+  img:hover {
+    opacity: 0.35;
+  }
+
+  a.makeProfilePhoto {
+    position: absolute;
+    left: 0px;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    
+    display: block;
+  }
+  a.delete {
+    position: absolute;
+    left: 130px;
+    top: 6px;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    line-height: 13px;
+
+    display: block;
+    text-align: center;
+    background-color: red;
+  }
+
+}
+
+
+
+
+
+
+
+// profile
 form.profile {
   input {
     display: inline-block;
@@ -87,15 +188,11 @@ form#uploader {
 
 
 
-
-
-
-
 section#notifications {
   min-height: 44px;
 }
 
-footer {
+footer#footer {
   text-align: center;
   font-size: 10px;
 }

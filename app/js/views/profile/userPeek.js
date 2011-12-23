@@ -7,6 +7,10 @@ define([
 
     tagName: 'section',
 
+    initialize: function() {
+      $(this.el).attr('class', 'userPeek');
+    },
+
     render: function(userJSON) {
       $(this.el).html(_.template(userPeekTemplate, userJSON));
       return this;
