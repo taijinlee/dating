@@ -3,16 +3,18 @@ define([
   'views/app',
   'views/signup',
   'views/users/browse',
-  'views/profile/edit',
   'views/profile/details',
+  'views/settings/settings',
+  'views/messages/list',
   'views/confirmUser'
-], function(appView, signupView, usersBrowseView, profileEditView, profileDetailsView, confirmUserView) {
+], function(appView, signupView, usersBrowseView, profileDetailsView, settingsView, messagesView, confirmUserView) {
 
   var views = {
     'signupView': signupView,
     'usersBrowseView': usersBrowseView,
-    'profileEditView': profileEditView,
     'profileDetailsView': profileDetailsView,
+    'settingsView': settingsView,
+    'messagesView': messagesView,
     'confirmUserView': confirmUserView
   };
 
@@ -53,8 +55,9 @@ define([
     routes: {
       '': 'signup',
       '/users': 'usersBrowse',
-      '/profile': 'profileEdit',
       '/profile/:user_id': 'profileDetails',
+      '/settings': 'settings',
+      '/messages': 'messages',
       '/confirmuser/:token/:time/:email': 'confirmUser',
       '*actions': 'defaultAction'
     },
@@ -72,12 +75,16 @@ define([
       this.renderView('usersBrowseView');
     },
 
-    profileEdit: function() {
-      this.renderView('profileEditView');
-    },
-
     profileDetails: function(user_id) {
       this.renderView('profileDetailsView', true, { id: user_id });
+    },
+
+    settings: function() {
+      this.renderView('settingsView');
+    },
+
+    messages: function() {
+      this.renderView('messagesView');
     },
 
     confirmUser: function(token, time, email) {

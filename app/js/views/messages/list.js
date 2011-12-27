@@ -1,41 +1,32 @@
-
 define([
-  'collections/users',
-  'views/users/user',
+  'views/messages/message',
+  'collections/messages',
   'text!/templates/paginated.html'
-], function(userCollection, userView, paginateTemplate) {
+], function(messageView, messagesCollection, paginateTemplate) {
 
-  var usersView = Backbone.View.extend({
+  var messagesListView = Backbone.View.extend({
 
-    tagName: 'section',
+    el: $('#content'),
 
     events: {
       'click a.prev': 'previous',
       'click a.next': 'next',
     },
 
-    className: 'nine columns',
-
     initialize: function(options) {
       this.vent = options.vent;
+      this.session = options.session;
 
-      this.collection = new userCollection;
+      this.collection = new messagesCollection();
       this.collection.bind('fetched', this.render, this);
-      this.vent.bind('refreshUserList', this.fetchUsers, this);
-
-      this.vent.trigger('filterChanged');
-    },
-
-    fetchUsers: function(query_string) {
-      this.collection.query_string = query_string;
-      this.collection.resetPages();
       this.collection.fetch();
     },
 
     render: function() {
+      alert('hi');
       $(this.el).empty();
-      this.collection.each(function(user) {
-        var view = new userView({ model: user });
+      this.collection.each(function(message) {
+        var view = new messageView({ model: message });
         $(this.el).append(view.render().el);
       }, this);
 
@@ -43,6 +34,7 @@ define([
       $(this.el).append(pagination);
       return this;
     },
+
 
     previous: function() {
       this.collection.previousPage();
@@ -54,7 +46,9 @@ define([
       return false;
     }
 
+
   });
 
-  return usersView;
+  return messagesListView;
+
 });

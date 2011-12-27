@@ -10,12 +10,11 @@ define([
   var profileDetailsView = Backbone.View.extend({
 
     el: $('#content'),
+    className: 'row',
 
     initialize: function(options) {
       this.vent = options.vent;
       this.session = options.session;
-
-      $(this.el).attr('class', 'row');
 
       this.userPeek = new userPeekView(options);
       this.userStats = new userStatsView(options);
@@ -23,7 +22,8 @@ define([
       this.imageUploader = new imageUploaderView(options);
 
       this.user = new userModel();
-      // this.user.bind('change', this.renderUserDetails, this);
+      this.vent.bind('userProfileFetched', this.renderUserDetails, this);
+      this.vent.bind('profilePictureUpdated', this.render, this);
     },
 
 
@@ -31,7 +31,7 @@ define([
       this.user.set({ id: options.id }, { silent: true });
       var self = this;
       this.user.fetch({
-        success: function() { self.renderUserDetails(); }
+        success: function() { self.vent.trigger('userProfileFetched'); }
       });
     },
 

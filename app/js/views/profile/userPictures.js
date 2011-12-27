@@ -1,20 +1,22 @@
 
 define([
+  'models/user',
   'collections/images'
-//  'text!/templates/profile/userPictures.html'
-], function(imagesCollection, userPicturesTemplate) {
+], function(userModel, imagesCollection) {
 
   var userPicturesView = Backbone.View.extend({
 
     tagName: 'ul',
 
     events: {
-      'click a.delete': 'deleteImage'
+      'click a.delete': 'deleteImage',
+      'click a.makeProfilePhoto': 'chooseProfileImage'
     },
 
 
     initialize: function(options) {
       this.vent = options.vent;
+      this.session = options.session;
 
       $(this.el).attr('class', 'userPictures eight columns');
 
@@ -44,7 +46,7 @@ define([
 
     showImage: function(imageModel) {
       var img = this.make('img', { 'src': '/actions/image/' + imageModel.get('id') });
-      var profile_photo = this.make('a', { 'href': '#', 'class': 'makeProfilePhoto' }, 'Make profile picture');
+      var profile_photo = this.make('a', { 'href': '#', 'class': 'makeProfilePhoto', 'id': 'imageprofile_' + imageModel.get('id')}, 'Make profile picture');
       var delete_photo = this.make('a', { 'href': '#', 'class': 'delete', 'id': 'image_' +imageModel.get('id') }, 'x');
 
       var li = this.make('li', { 'class': 'picture', 'id': 'image_container_' + imageModel.get('id') });
@@ -52,11 +54,19 @@ define([
       $(this.el).append(li);
     },
 
-    deleteImage: function(event, something) {
+    deleteImage: function(event) {
       var image = this.collection.get($(event.target).attr('id').split('_')[1]);
       this.collection.remove(image);
       $('#image_container_' + image.get('id')).remove();
       image.destroy();
+      return false;
+    },
+
+    chooseProfileImage: function(event) {
+      this.user = new userModel({ id: this.session.user_id });
+      this.user.set({ 'profile_image_id': $(event.target).attr('id').split('_')[1] });
+      this.user.save();
+      this.vent.trigger('profilePictureUpdated', { id: this.session.user_id });
       return false;
     }
 

@@ -1,8 +1,12 @@
 <section class="user">
   <a href="/#/profile/<%= id %>">
-  <p>profile pic</p>
-  <%= username %>
+    <img src="/actions/image/<%= profile_image_id %>">
   </a>
-  <br />
-  <%= age %>, <%= gender %>, Location
+  <aside>
+    <a href="/#/profile/<%= id %>">
+      <%= username %>
+    </a>
+    <br />
+    <%= age %>, <%= gender %>, Location
+  </aside>
 </section>
