@@ -9,6 +9,7 @@ define([
   var userStatsView = Backbone.View.extend({
 
     tagName: 'form',
+    className: 'profileBasics five columns nice',
 
     events: {
       'click a.edit': 'editRender',
@@ -17,8 +18,6 @@ define([
     },
 
     initialize: function() {
-      _.bindAll(this, 'editRender');
-      $(this.el).attr('class', 'profileBasics four columns nice');
     },
 
     render: function(user) {
@@ -45,6 +44,7 @@ define([
 
     cancel: function() {
       this.render(this.user);
+      return false;
     },
 
     save: function() {
@@ -61,6 +61,7 @@ define([
       this.user.set(inputs);
       this.user.save();
       this.cancel();
+      return false;
     }
 
   });

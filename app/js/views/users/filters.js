@@ -7,11 +7,11 @@ define([
   var filtersView = Backbone.View.extend({
 
     tagName: 'ul',
+    className: 'four columns',
 
     initialize: function(options) {
       this.vent = options.vent;
 
-      $(this.el).attr('class', 'three columns');
       this.collection = new filtersCollection([
         { name: 'age', type: 'range', options: { upper: 100, lower: 18 }},
         { name: 'marital_status', type: 'checkbox', options: ['single', 'married', 'separated', 'divorced'] }
@@ -39,7 +39,6 @@ define([
       });
       this.vent.trigger('refreshUserList', query_string.join('&'));      
     }
-
 
   });
 

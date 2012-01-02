@@ -9,15 +9,6 @@ define([
   'views/confirmUser'
 ], function(appView, signupView, usersBrowseView, profileDetailsView, settingsView, messagesView, confirmUserView) {
 
-  var views = {
-    'signupView': signupView,
-    'usersBrowseView': usersBrowseView,
-    'profileDetailsView': profileDetailsView,
-    'settingsView': settingsView,
-    'messagesView': messagesView,
-    'confirmUserView': confirmUserView
-  };
-
   var AppRouter = Backbone.Router.extend({
 
     initialize: function(options) {
@@ -25,29 +16,40 @@ define([
       this.appView = new appView({ vent: this.vent });
 
       var self = this;
-      var viewClosures = function() {
-        var views_cache = {};
+      var viewClosure = function() {
+
+        var checkLogin = function(session) {
+          if (session.user_id == undefined) {
+            self.navigate('', true);
+            return false;
+          }
+          return true;
+        }
 
         var renderView = function(viewName, login_required, render_args) {
+
+          $('#content').unbind();
+          self.vent.unbind();
+
           if (login_required == undefined) {
             true;
           }
 
           var session = self.getSession();
-          if (login_required && !self.checkLogin(session)) {
+          if (login_required && !checkLogin(session)) {
             return;
           }
 
-          if (typeof views_cache[viewName] === 'undefined') {
-            views_cache[viewName] = new views[viewName]({ 'vent': self.vent, 'session': session });
-          }
           self.appView.render(session);
-          views_cache[viewName].render(render_args);
+
+          var view = new viewName({ 'vent': self.vent, 'session': session });
+          view.render(render_args);
         };
+
         return renderView;
       };
 
-      this.renderView = viewClosures();
+      this.renderView = viewClosure();
 
       Backbone.history.start();
     },
@@ -67,24 +69,24 @@ define([
       if (session.user_id != undefined) {
         this.navigate('/users', true);
       } else {
-        this.renderView('signupView', false);
+        this.renderView(signupView, false);
       }
     },
 
     usersBrowse: function() {
-      this.renderView('usersBrowseView');
+      this.renderView(usersBrowseView);
     },
 
     profileDetails: function(user_id) {
-      this.renderView('profileDetailsView', true, { id: user_id });
+      this.renderView(profileDetailsView, true, { id: user_id });
     },
 
     settings: function() {
-      this.renderView('settingsView');
+      this.renderView(settingsView);
     },
 
     messages: function() {
-      this.renderView('messagesView');
+      this.renderView(messagesView);
     },
 
     confirmUser: function(token, time, email) {
@@ -108,14 +110,6 @@ define([
         }
       });
       return session;
-    },
-
-    checkLogin: function(session) {
-      if (session.user_id == undefined) {
-        this.navigate('', true);
-        return false;
-      }
-      return true;
     }
 
   });

@@ -7,12 +7,12 @@ define([
   var imageUploaderView = Backbone.View.extend({
 
     tagName: 'section',
+    className: 'imageUploader',
 
     events: {
       'change input#image': 'formSubmit',
       'click a#image_upload_button': 'triggerUploaderClick',
     },
-
 
    initialize: function(options) {
       this.vent = options.vent;

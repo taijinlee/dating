@@ -14,7 +14,7 @@ define([
     },
 
     render: function(options) {
-      $(this.el).html(_.template(headerTemplate)).attr('id', 'header');
+      $(this.el).html(_.template(headerTemplate));
 
       if (options.user_id != undefined) {
         $(this.el).find('aside').html(_.template(loggedInTemplate, options));

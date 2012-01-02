@@ -1,6 +1,10 @@
 <section class="user">
   <a href="/#/profile/<%= id %>">
-    <img src="/actions/image/<%= profile_image_id %>">
+    <% if (profile_image_id == 0) { %>
+      <img src="/images/nophoto.jpg">
+    <% } else { %>
+      <img src="/actions/image/<%= profile_image_id %>">
+    <% } %>
   </a>
   <aside>
     <a href="/#/profile/<%= id %>">

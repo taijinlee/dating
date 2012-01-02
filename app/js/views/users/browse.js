@@ -10,17 +10,16 @@ define([
 
     initialize: function(options) {
       this.vent = options.vent;
-
-      this.filters = new filtersView({ vent: this.vent });
-      this.users = new usersView({ vent: this.vent });
-
-      $(this.el).attr('class', 'row');
     },
 
     render: function() {
       $(this.el).empty();
-      $(this.el).append(this.filters.render().el);
-      $(this.el).append(this.users.render().el);
+
+      var filters = new filtersView({ vent: this.vent });
+      var users = new usersView({ vent: this.vent });
+
+      $(this.el).append(filters.render().el);
+      $(this.el).append(users.render().el);
     }
 
   });

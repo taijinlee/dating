@@ -8,22 +8,19 @@ define([
   var usersView = Backbone.View.extend({
 
     tagName: 'section',
+    className: 'twelve columns',
 
     events: {
       'click a.prev': 'previous',
       'click a.next': 'next',
     },
 
-    className: 'nine columns',
-
     initialize: function(options) {
       this.vent = options.vent;
 
       this.collection = new userCollection;
-      this.collection.bind('fetched', this.render, this);
+      this.collection.bind('fetched', this.renderUsers, this);
       this.vent.bind('refreshUserList', this.fetchUsers, this);
-
-      this.vent.trigger('filterChanged');
     },
 
     fetchUsers: function(query_string) {
@@ -33,6 +30,11 @@ define([
     },
 
     render: function() {
+      this.vent.trigger('filterChanged');
+      return this;
+    },
+
+    renderUsers: function() {
       $(this.el).empty();
       this.collection.each(function(user) {
         var view = new userView({ model: user });

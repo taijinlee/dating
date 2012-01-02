@@ -5,6 +5,7 @@ define([
   var dateSelector = Backbone.View.extend({
 
     tagName: 'span',
+    className: 'dateSelector',
 
     initialize: function(options) {
       this.name_prefix = options.name_prefix;
@@ -23,7 +24,7 @@ define([
       var name = this.name_prefix + '_' + type;
       var option_display = type.charAt(0).toUpperCase() + type.slice(1) + ':';
 
-      var select = $('<select name="' + name + '"></select>');
+      var select = $('<select name="' + name + '"></select>').attr('class', 'tiny');
       select.append($('<option value="">' + option_display + '</option>').attr('value', ''));
 
       var lower_bound = 1, upper_bound = 12;
