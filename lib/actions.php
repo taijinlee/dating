@@ -26,8 +26,8 @@ abstract class actions {
 
   protected static function get_data() {
     $handle = fopen('php://input','r');
-    $jsonInput = fgets($handle);
-    $decoded = json_decode($jsonInput, true);
+    $json_input = fgets($handle);
+    $decoded = json_decode($json_input, true);
     return $decoded;
   }
 
