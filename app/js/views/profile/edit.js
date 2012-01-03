@@ -18,7 +18,6 @@ define([
     initialize: function(options) {
       this.vent = options.vent;
       this.session = options.session;
-      $(this.el).attr('class', 'row');
 
       this.user = new userModel({ id: this.session.user_id });
     },
