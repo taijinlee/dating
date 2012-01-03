@@ -9,7 +9,6 @@ define([
   var profileDetailsView = Backbone.View.extend({
 
     el: $('#content'),
-    className: 'row',
 
     initialize: function(options) {
       this.vent = options.vent;

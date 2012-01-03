@@ -17,10 +17,6 @@ define([
     render: function(userJSON) {
       $(this.el).html(_.template(userPeekTemplate, userJSON));
       return this;
-    },
-
-    updateProfilePicture: function() {
-
     }
 
   });

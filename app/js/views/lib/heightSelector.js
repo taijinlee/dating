@@ -21,7 +21,7 @@ define([
       var name = name_prefix + '_' + type;
       var option_display = type.charAt(0).toUpperCase() + type.slice(1) + ':';
 
-      var select = $('<select name="' + name + '"></select>');
+      var select = $('<select name="' + name + '"></select>').attr('class', 'tiny');
       select.append($('<option>' + option_display + '</option>').attr('value', ''));
 
       for (var i = lower_bound; i <= upper_bound; i++) {
