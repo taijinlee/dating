@@ -38,7 +38,7 @@ define([
 
       $(this.el).append(this.make('a', { 'class': 'save nice small radius blue button'}, 'Save'));
       $(this.el).append(this.make('a', { 'class': 'cancel nice small radius white button'}, 'Cancel'));
-
+      $('form.profileBasics header aside a.edit').attr('hidden', 'true');
       return false;
     },
 
