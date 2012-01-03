@@ -6,7 +6,7 @@ define([
     tagName: 'div',
 
     events: {
-      'click a#alert_close': 'closeNotification'
+      'click a.alert_close': 'closeNotification'
     },
 
     initialize: function(options) {
@@ -23,6 +23,7 @@ define([
 
       $(this.el).html(_.template(notificationsTemplate, {'message': message}));
       $('section#notifications').append($(this.el));
+      this.delegateEvents();
     },
 
     closeNotification: function() {
