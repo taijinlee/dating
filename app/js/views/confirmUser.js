@@ -20,12 +20,12 @@ define([
         success: function(response) {
           if (response == 'true') {            
             // yay
-            self.vent.trigger('renderNotification', 'Your email has been confirmed', 'success');
             Backbone.history.navigate('/users', true);
+            self.vent.trigger('renderNotification', 'Your email has been confirmed', 'success');
           } else {
             // nay
-            self.vent.trigger('renderNotification', 'The link you have provided is no good', 'error');
             Backbone.history.navigate('', true);
+            self.vent.trigger('renderNotification', 'The link you have provided is no good', 'error');
           }
         }
       });

@@ -33,7 +33,7 @@ define([
           self.appView.bindNotifications();
 
           if (login_required == undefined) {
-            true;
+            login_required = true;
           }
 
           var session = self.getSession();
