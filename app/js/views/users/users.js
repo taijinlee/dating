@@ -12,7 +12,7 @@ define([
 
     events: {
       'click a.prev': 'previous',
-      'click a.next': 'next',
+      'click a.next': 'next'
     },
 
     initialize: function(options) {
