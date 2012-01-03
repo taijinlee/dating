@@ -27,7 +27,7 @@ define([
 
     signup: function() {
       var values = {};
-      $('#signup :input').each(function() {
+      $('form.signup :input').each(function() {
         values[this.name] = $(this).val();
       });
 

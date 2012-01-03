@@ -28,11 +28,10 @@ define([
     },
 
     /**
-     * Application functions
+     * Rebind notification triggers
      */
-    navigate: function(url) {
-      // this.vent.trigger('navigated');
-      Backbone.history.navigate(url, true);
+    bindNotifications: function() {
+      this.notifications.bind();
     }
 
   });

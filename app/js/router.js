@@ -30,6 +30,7 @@ define([
 
           $('#content').unbind();
           self.vent.unbind();
+          self.appView.bindNotifications();
 
           if (login_required == undefined) {
             true;

@@ -11,14 +11,17 @@ define([
 
     initialize: function(options) {
       this.vent = options.vent;
+    },
+
+    bind: function() {
       this.vent.bind('renderNotification', this.renderNotification, this);
       // this.vent.bind('navigated', this.closeNotification, this);
     },
 
     renderNotification: function(message, alert_type) {
-      $(this.el).attr('class', 'six columns offset-by-three alert-box ' + alert_type)
+      $(this.el).attr('class', 'eight columns offset-by-four alert-box ' + alert_type);
 
-      $(this.el).html(_.template(notificationsTemplate, {message: message}));
+      $(this.el).html(_.template(notificationsTemplate, {'message': message}));
       $('section#notifications').append($(this.el));
     },
 
