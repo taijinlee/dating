@@ -1,6 +1,9 @@
 <%= name.charAt(0).toUpperCase() + name.slice(1) %>:
 <div id="<%= name %>_checkbox">
   <% for (var i = 0; i < options.length; i++) { %>
-     <input type="checkbox" name="<%= options[i] %>" value="<%= options[i] %>" id="<%= name + '_' + options[i] %>" checked="checked" /><label for="<%= name + '_' + options[i] %>"><%= options[i].charAt(0).toUpperCase() + options[i].slice(1) %></label>
+     <div class="filter_container">
+       <input type="checkbox" name="<%= options[i] %>" value="<%= options[i] %>" id="<%= name + '_' + options[i] %>" checked="checked" />
+       <label for="<%= name + '_' + options[i] %>"><%= options[i].charAt(0).toUpperCase() + options[i].slice(1) %></label>
+     </div>
   <% } %>
 </div>
