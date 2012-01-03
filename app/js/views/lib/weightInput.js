@@ -9,8 +9,8 @@ define([
     initialize: function(options) {
       this.weight = options.weight;
 
-      $(this.el).html(' lbs').attr('class', 'nice');
-      $(this.el).prepend(this.make('input', { 'class': 'weightInput nice small input-text', 'value': (this.weight > 0) ? this.weight : '', 'name': 'weight' }));
+      $(this.el).html(' lbs');
+      $(this.el).prepend(this.make('input', { 'type': 'text', 'class': 'weightInput small', 'value': (this.weight > 0) ? this.weight : '', 'name': 'weight' }));
     },
 
     render: function() {
