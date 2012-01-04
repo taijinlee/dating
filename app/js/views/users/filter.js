@@ -45,15 +45,23 @@ define([
         max: options.upper,
         values: [ options.lower, options.upper ],
         slide: function(event, ui) {
-          textEl.html(ui.values[0] + " - " + ui.values[1]);
+          if (self.model.get('name') == 'height') {
+            textEl.html(Math.floor(ui.values[0]/12) + "'" + (ui.values[0]%12)  + '" - ' + Math.floor(ui.values[1]/12) + "'" + (ui.values[1]%12)  + '"');
+          } else {
+            textEl.html(ui.values[0] + " - " + ui.values[1]);
+          }
         },
         change: function(event, ui) {
           self.model.set({ 'range': { lower: ui.values[0], upper: ui.values[1] }});
           self.vent.trigger('filterChanged');
         }
       });
-      textEl.html(sliderEl.slider("values", 0) + ' - ' + sliderEl.slider("values", 1));
 
+      if (this.model.get('name') == 'height') {
+        textEl.html(Math.floor(sliderEl.slider("values", 0)/12) + "'" + (sliderEl.slider("values", 0)%12)  + '" - ' + Math.floor(sliderEl.slider("values", 1)/12) + "'" + (sliderEl.slider("values", 1)%12)  + '"');
+      } else {
+        textEl.html(sliderEl.slider("values", 0) + ' - ' + sliderEl.slider("values", 1));
+      }
     },
 
     setCheckboxModel: function(clickedEvent) {

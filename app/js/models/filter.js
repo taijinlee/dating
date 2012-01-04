@@ -7,8 +7,8 @@ define([
     initialize: function(attr) {
       if (attr.type == 'checkbox') {
         attr.checked = {};
-        for (var i = 0; i < attr.options.length; i++) {
-          attr.checked[attr.options[i]] = 1;
+        for (key in attr.options) {
+          attr.checked[key] = 1;
         }
       } else if (attr.type == 'range') {
         attr.range = attr.options;
@@ -27,8 +27,9 @@ define([
         if (this.get('name') == 'age') {
           name = 'birthday';
           var date = new Date();
-          range.upper = (parseInt(date.getFullYear(), 10) - range.upper) + '-' + date.getMonth() + '-' + date.getDate();
-          range.lower = (parseInt(date.getFullYear(), 10) - range.lower) + '-' + date.getMonth() + '-' + date.getDate();
+          var upper_temp = (parseInt(date.getFullYear(), 10) - range.lower) + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+          range.lower = (parseInt(date.getFullYear(), 10) - range.upper) + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+          range.upper = upper_temp;
         }
 
         return { name: name, range: range };
@@ -49,7 +50,7 @@ define([
         }
         query_part = data.name + '=' + query_part.join(',');
       } else if (this.get('type') == 'range') {
-        query_part = data.name + '=[' + data.range.upper + ',' + data.range.lower + ']';
+        query_part = data.name + '=[' + data.range.lower + ',' + data.range.upper + ']';
       }
       return query_part;
     }

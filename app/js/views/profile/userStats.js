@@ -2,9 +2,9 @@
 define([
   'views/lib/heightSelector',
   'views/lib/weightInput',
-  'views/lib/maritalSelector',
+  'views/lib/ethnicitySelector',
   'text!/templates/profile/userStats.html'
-], function(heightSelectorView, weightInputView, maritalStatusSelectorView, userStatsTemplate) {
+], function(heightSelectorView, weightInputView, ethnicityStatusSelectorView, userStatsTemplate) {
 
   var userStatsView = Backbone.View.extend({
 
@@ -33,8 +33,8 @@ define([
       var userHeightSelector = new heightSelectorView({ 'height': this.user.get('height') });
       $('dd.height').replaceWith(userHeightSelector.render().el);
 
-      var martialStatusSelector = new maritalStatusSelectorView({ 'marital_status': this.user.get('marital_status') });
-      $('dd.marital_status').replaceWith(martialStatusSelector.render().el);
+      var martialStatusSelector = new ethnicityStatusSelectorView({ 'ethnicity': this.user.get('ethnicity') });
+      $('dd.ethnicity').replaceWith(martialStatusSelector.render().el);
 
       $(this.el).append(this.make('a', { 'class': 'save nice small radius blue button'}, 'Save'));
       $(this.el).append(this.make('a', { 'class': 'cancel nice small radius white button'}, 'Cancel'));

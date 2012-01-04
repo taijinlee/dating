@@ -13,8 +13,11 @@ define([
       this.vent = options.vent;
 
       this.collection = new filtersCollection([
-        { name: 'age', type: 'range', options: { upper: 100, lower: 18 }},
-        { name: 'marital_status', type: 'checkbox', options: ['single', 'married', 'separated', 'divorced'] }
+        { name: 'age', type: 'range', options: { lower: 18, upper: 100 }},
+        { name: 'height', type: 'range', options: { lower: 48, upper: 95 }},
+        { name: 'weight', type: 'range', options: { lower: 0, upper: 300 }},
+        // { name: 'smoker', type: 'checkbox', options: {'1': 'Smoker OK' }},
+        { name: 'ethnicity', type: 'checkbox', options: {'declined': 'Declined to Answer', 'asian': 'Asian', 'black': 'Black', 'latino': 'Latino', 'middle_eastern': 'Middle Eastern', 'mixed': 'Mixed', 'native_american': 'Native American', 'south_asian': 'South Asian', 'white': 'White', 'other': 'Other'}}
       ]);
 
       this.vent.bind('filterChanged', this.refreshUsers, this);
@@ -34,7 +37,6 @@ define([
       // get parameters, then trigger event
       var query_string = [];
       this.collection.each(function(filter) {
-        var query_part = filter.getQueryPart();
         query_string.push(filter.getQueryPart());
       });
       this.vent.trigger('refreshUserList', query_string.join('&'));      
